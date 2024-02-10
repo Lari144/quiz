@@ -1,97 +1,72 @@
 <template>
-  <div class="font-sans text-[#333]">
-    <div
-      class="min-h-screen flex flex-col items-center justify-center dark:bg-slate-800"
-    >
-      <div v-if="!isHidden">
+  <div class="font-base text-[#333]">
+    <div class="bg-dark">
+      <div v-if="!isHidden" class="w-full max-w-sm px-4">
         <div>
           <form @submit.prevent="login">
             <div class="mb-12">
-              <h3 class="text-3xl font-extrabold text-slate-50">Sign in</h3>
-              <p class="text-sm mt-4 text-slate-50">
+              <h3 class="form-heading">Sign in</h3>
+              <p class="form-subtext">
                 Don't have an account
-                <a
-                  @click="isHidden = true"
-                  class="text-blue-600 font-semibold hover:underline ml-1 whitespace-nowrap"
-                  >Register here</a
-                >
+                <a @click="isHidden = true" class="text-link">Register here</a>
               </p>
             </div>
             <div>
-              <label class="text-xs block mb-2 text-slate-50">Email</label>
+              <label class="label-text">Email</label>
               <input
                 v-model="credentials.email"
                 type="email"
                 required
-                class="w-full text-sm border-b border-gray-300 focus:border-[#333] px-2 py-3 outline-none"
+                class="input-base input-email"
                 placeholder="Enter email"
               />
             </div>
             <div class="mt-8">
-              <label class="text-xs block mb-2 text-slate-50">Password</label>
+              <label class="label-text">Password</label>
               <input
                 v-model="credentials.password"
                 type="password"
                 required
-                class="w-full text-sm border-b border-gray-300 focus:border-[#333] px-2 py-3 outline-none"
+                class="input-base input-password"
                 placeholder="Enter password"
               />
             </div>
             <div class="mt-12">
-              <button
-                type="submit"
-                class="w-full shadow-xl py-2.5 px-4 text-sm font-semibold rounded-full text-white bg-blue-600 hover:bg-blue-700 focus:outline-none"
-              >
-                Sign in
-              </button>
+              <button type="submit" class="btn btn-purple">Sign in</button>
             </div>
           </form>
         </div>
       </div>
-      <div
-        v-else
-        class="min-h-screen flex flex-col items-center justify-center dark:bg-slate-800"
-      >
+      <div v-else class="w-full max-w-sm px-4">
         <div>
           <form @submit.prevent="register">
             <div class="mb-12">
-              <h3 class="text-3xl font-extrabold text-slate-50">Register</h3>
-              <p class="text-sm mt-4 text-slate-50">
+              <h3 class="form-heading">Register</h3>
+              <p class="form-subtext">
                 Already have an account?
-                <a
-                  @click="isHidden = false"
-                  class="text-blue-600 font-semibold hover:underline ml-1 whitespace-nowrap"
-                  >Login here</a
-                >
+                <a @click="isHidden = false" class="text-link">Login here</a>
               </p>
             </div>
             <div>
-              <label class="text-xs block mb-2 text-slate-50">Email</label>
+              <label class="label-text">Email</label>
               <input
                 v-model="credentials.email"
                 type="email"
-                required
-                class="w-full text-sm border-b focus:border-[#] px-2 py-3 outline-none"
+                class="input-base input-email"
                 placeholder="Enter email"
               />
             </div>
             <div class="mt-8">
-              <label class="text-xs block mb-2 text-slate-50">Password</label>
+              <label class="label-text">Password</label>
               <input
                 v-model="credentials.password"
                 type="password"
-                required
-                class="w-full text-sm border-b border-gray-300 focus:border-[#333] px-2 py-3 outline-none"
+                class="input-base input-password"
                 placeholder="Enter password"
               />
             </div>
             <div class="mt-12">
-              <button
-                type="submit"
-                class="w-full shadow-xl py-2.5 px-4 text-sm font-semibold rounded-full text-white bg-blue-600 hover:bg-blue-700 focus:outline-none"
-              >
-                Register
-              </button>
+              <button type="submit" class="btn btn-purple">Register</button>
             </div>
           </form>
         </div>
