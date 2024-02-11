@@ -48,6 +48,15 @@
               </p>
             </div>
             <div>
+              <label class="label-text">Username</label>
+              <input
+                v-model="credentials.full_name"
+                type="username"
+                class="input-base input-email"
+                placeholder="Enter username"
+              />
+            </div>
+            <div class="mt-5">
               <label class="label-text">Email</label>
               <input
                 v-model="credentials.email"
@@ -56,7 +65,7 @@
                 placeholder="Enter email"
               />
             </div>
-            <div class="mt-8">
+            <div class="mt-5">
               <label class="label-text">Password</label>
               <input
                 v-model="credentials.password"
@@ -76,13 +85,17 @@
 </template>
 
 <script setup lang="ts">
+import type { Credentials } from "~/types/credentials";
+
 definePageMeta({
   middleware: "unauth",
 });
 
 const isHidden = ref(false);
 const supaAuth = useSupabaseClient().auth;
-const credentials = reactive({
+
+const credentials = reactive<Credentials>({
+  full_name: "",
   email: "",
   password: "",
 });
@@ -97,7 +110,15 @@ const login = async () => {
 };
 
 const register = async () => {
-  const { error } = await supaAuth.signUp(credentials);
+  const { data, error } = await supaAuth.signUp({
+    email: credentials.email,
+    password: credentials.password,
+    options: {
+      data: {
+        full_name: credentials.full_name,
+      },
+    },
+  });
   if (error) {
     alert(error.message);
   } else {

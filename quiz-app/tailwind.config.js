@@ -19,6 +19,8 @@ module.exports = {
         "input-bg": "#282828",
         "dark-purple": "#1a1625",
         "light-grey-p": "#908d96",
+        "mid-purple": "#46424f",
+        "darker-grey": "#3f3f3f",
       },
     },
   },
