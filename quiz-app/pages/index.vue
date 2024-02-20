@@ -1,16 +1,16 @@
 <template>
-  <div class="font-base text-[#333] bg-dark min-h-screen">
-    <header class="w-full flex justify-between items-center px-4 py-2">
-      <div class="flex justify-start">
+  <div class="font-base text-[#333] bg-dark min-h-screen flex flex-col">
+    <header class="w-full flex justify-between items-start px-4 pt-2">
+      <div>
         <h1 class="form-heading m-4">
           Hello, {{ user.user_metadata.full_name }}!
         </h1>
       </div>
-      <div class="flex justify-end m-4">
+      <div class="m-4">
         <button @click="logout" class="btn btn-purple m-0">Logout</button>
       </div>
     </header>
-    <main><Boxes /></main>
+    <main class="flex-grow px-4"><Boxes /></main>
   </div>
 </template>
 
