@@ -10,7 +10,10 @@
         <button @click="logout" class="btn btn-purple m-0">Logout</button>
       </div>
     </header>
-    <main class="flex-grow px-4"><Boxes /></main>
+    <div class="flex-grow px-4">
+      <Category />
+      <Boxes />
+    </div>
   </div>
 </template>
 
