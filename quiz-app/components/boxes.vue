@@ -9,7 +9,7 @@
     <div class="p-12">
       <div class="flex flex-wrap gap-4">
         <div
-          @click="addCard"
+          @click="showModal = true"
           class="cursor-pointer flex justify-center items-center w-80 h-64 bg-input-bg rounded-lg text-4xl text-mid-purple hover:text-dark-purple hover:bg-darker-grey transition-colors"
         >
           +
@@ -44,6 +44,9 @@
         </div>
       </div>
     </div>
+    <div v-if="showModal">
+      <Modal @update:showModal="showModal = $event" @submit="addCard" />
+    </div>
   </ClientOnly>
 </template>
 
@@ -53,6 +56,7 @@ import { addRecord, fetchRecords } from "./dbServices";
 
 const boxes = ref([]);
 const supabase = useSupabaseClient();
+const showModal = ref(false);
 
 const refreshData = async () => {
   try {
@@ -64,9 +68,10 @@ const refreshData = async () => {
 
 onMounted(refreshData);
 
-const addCard = async () => {
+const addCard = async ({ name, category }) => {
+  console.log(name, category);
   const tableName = "cards";
-  const data = { title: "New Record Name" };
+  const data = { title: name };
   try {
     await addRecord(supabase, tableName, data);
     await refreshData();
