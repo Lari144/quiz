@@ -9,22 +9,20 @@
       <form class="flex flex-col justify-between h-full">
         <div>
           <div class="text-white">
-            <label class="p-1">Card Name:</label>
+            <label class="p-1">Add categories:</label>
             <input
-              v-model="title"
+              v-model="category"
               type="text"
               class="text-white input-base border-darker-grey focus:border-dark-purple"
             />
-          </div>
-          <div class="text-white mt-4">
-            <label class="p-1">Category:</label>
-            <select
-              v-model="category"
-              class="input-base border-darker-grey focus:border-dark-purple"
-            >
-              <option disabled value="">Please select one</option>
-              <option v-for="item in categories">{{ item.name }}</option>
-            </select>
+            <div>
+              <label class="p-1">Description:</label>
+              <input
+                v-model="description"
+                type="text"
+                class="text-white input-base border-darker-grey focus:border-dark-purple"
+              />
+            </div>
           </div>
         </div>
         <div class="mt-4 flex justify-end">
@@ -34,7 +32,7 @@
             class="btn btn-purple"
             style="width: 100px"
           >
-            Add Card
+            Add
           </button>
           <button type="button" @click="closeModal" class="ml-2 text-slate-300">
             Cancel
@@ -46,32 +44,17 @@
 </template>
 
 <script setup>
-import { fetchRecordsCategorie } from "./dbServices";
 const emits = defineEmits(["update:showModal", "submit"]);
 
-const title = ref("");
 const category = ref("");
-const categories = ref([]);
-const supabase = useSupabaseClient();
-
-onMounted(() => {
-  fetchCategories();
-});
+const description = ref("");
 
 const closeModal = () => {
   emits("update:showModal", false);
 };
 
 const submit = () => {
-  emits("submit", { name: title.value, category: category.value });
+  emits("submit", { name: category.value, description: description.value });
   closeModal();
-};
-
-const fetchCategories = async () => {
-  try {
-    categories.value = await fetchRecordsCategorie(supabase, "categories");
-  } catch (error) {
-    console.error("Error fetching records:", error);
-  }
 };
 </script>
