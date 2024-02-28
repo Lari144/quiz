@@ -13,6 +13,9 @@
       class="bg-darker-grey rounded-lg flex flex-col items-center justify-center p-3 text-white text-center"
     >
       {{ question.text }}
+      <div v-for="answer in answers">
+        {{ answer.text }}
+      </div>
       <button>
         <i class="fa fa-solid fa-pencil" style="color: white"></i>
       </button>
@@ -45,6 +48,7 @@ const routeTo = () => {
 const refreshData = async () => {
   try {
     questions.value = await fetchRecords(supabase, "questions");
+    answers.value = await fetchRecords(supabase, "answers");
   } catch (error) {
     console.error("Error fetching records:", error);
   }
@@ -52,20 +56,21 @@ const refreshData = async () => {
 
 onMounted(refreshData);
 
-const addAnwers = async (answer, question_id) => {
+const addQuestions = async ({ question, answer }) => {
+  const question_data = { text: question };
   try {
-    const anwer_data = { text: answer, question_id: question_id };
-    await addRecord(supabase, "answers", anwer_data);
+    await addRecord(supabase, "questions", question_data);
+    await addAnwers(answer);
+    await refreshData();
   } catch (error) {
     console.error("Error adding record:", error.message);
   }
 };
 
-const addQuestions = async ({ question, answer }) => {
+const addAnwers = async (answer) => {
+  const anwer_data = { text: answer };
   try {
-    const question_data = { text: question };
-    await addRecord(supabase, "questions", question_data);
-    await refreshData();
+    await addRecord(supabase, "answers", anwer_data);
   } catch (error) {
     console.error("Error adding record:", error.message);
   }
