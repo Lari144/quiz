@@ -7,9 +7,7 @@ export const addRecord = async (supabaseClient, tableName, data) => {
 };
 
 export const fetchRecords = async (supabaseClient, tableName) => {
-  const { error, data } = await supabaseClient
-    .from(tableName)
-    .select("title, category_id");
+  const { error, data } = await supabaseClient.from(tableName).select();
   if (error) throw error;
   return data;
 };
@@ -18,6 +16,24 @@ export const fetchRecordsCategorie = async (supabaseClient, tableName) => {
   const { error, data } = await supabaseClient
     .from(tableName)
     .select("name, description");
+  if (error) throw error;
+  return data;
+};
+
+export const deleteRecord = async (supabaseClient, tableName, id) => {
+  const { error, data } = await supabaseClient
+    .from(tableName)
+    .delete()
+    .eq("id", id);
+  if (error) throw error;
+  return data;
+};
+
+export const updateRecord = async (supabaseClient, tableName, id, newTitle) => {
+  const { error, data } = await supabaseClient
+    .from(tableName)
+    .update({ title: newTitle })
+    .eq("id", id);
   if (error) throw error;
   return data;
 };

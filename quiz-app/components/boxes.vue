@@ -20,25 +20,61 @@
           class="w-80 h-64 bg-darker-grey rounded-lg flex flex-col justify-between p-3"
         >
           <div class="flex justify-between" style="font-size: x-large">
-            <button>
+            <button @click="deleteCard(box.id)">
               <i class="fa fa-solid fa-trash" style="color: #b51313"></i>
             </button>
-            <button>
-              <i class="fa fa-solid fa-pencil" style="color: white"></i>
-            </button>
+            <div>
+              <button @click="routeTo">
+                <i
+                  v-if="!box.showInput"
+                  class="fa fa-solid fa-pencil"
+                  style="color: white"
+                ></i>
+              </button>
+              <button
+                class="text-gray-300 text-lg hover:text-red-500"
+                @click="toggleInput(box)"
+                v-if="box.showInput"
+                style=""
+              >
+                cancel
+              </button>
+            </div>
           </div>
-          <div
-            class="flex justify-center"
-            style="color: white; font-size: xx-large"
-          >
-            {{ box.title }}
+          <div>
+            <div
+              v-if="!box.showInput"
+              @dblclick="toggleInput(box)"
+              class="flex justify-center"
+              style="color: white; font-size: xx-large"
+            >
+              {{ box.title }}
+            </div>
+            <input
+              class="text-white input-base border-darker-grey focus:border-dark-purple"
+              v-if="box.showInput"
+              v-model="newCardTitle"
+              type="text"
+              style="font-size: large"
+            />
           </div>
           <div class="flex justify-end" style="font-size: x-large">
-            <button class="mr-4">
+            <button v-if="!box.showInput" class="mr-4">
               <i class="fa fa-solid fa-play" style="color: white"></i>
             </button>
             <button>
-              <i class="fa fa-solid fa-graduation-cap" style="color: white"></i>
+              <i
+                v-if="!box.showInput"
+                class="fa fa-solid fa-graduation-cap"
+                style="color: white"
+              ></i>
+            </button>
+            <button
+              class="text-gray-300 text-xl hover:text-white"
+              @click="updateCard(box, box.id)"
+              v-if="box.showInput"
+            >
+              save
             </button>
           </div>
         </div>
@@ -52,11 +88,17 @@
 
 <script setup lang="ts">
 import { ref, onMounted } from "vue";
-import { addRecord, fetchRecords } from "./dbServices";
+import {
+  addRecord,
+  fetchRecords,
+  deleteRecord,
+  updateRecord,
+} from "./dbServices";
 
 const boxes = ref([]);
 const supabase = useSupabaseClient();
 const showModal = ref(false);
+const newCardTitle = ref("");
 
 const refreshData = async () => {
   try {
@@ -78,5 +120,35 @@ const addCard = async ({ name, category }) => {
   } catch (error) {
     console.error("Error adding record:", error.message);
   }
+};
+
+const deleteCard = async (index) => {
+  const tablename = "cards";
+  try {
+    await deleteRecord(supabase, tablename, index);
+    await refreshData();
+  } catch (error) {
+    console.error("Error deleting record:", error.message);
+  }
+};
+
+const updateCard = async (box, index) => {
+  const tablename = "cards";
+  try {
+    console.log(box, newCardTitle);
+    await updateRecord(supabase, tablename, index, newCardTitle.value);
+    toggleInput(box);
+    await refreshData();
+  } catch (error) {
+    console.error("Error deleting record:", error.message);
+  }
+};
+
+const routeTo = () => {
+  navigateTo("/home");
+};
+
+const toggleInput = (box) => {
+  box.showInput = !box.showInput;
 };
 </script>
