@@ -32,7 +32,6 @@
               class="text-gray-300 text-lg hover:text-red-500"
               @click="toggleInput(box)"
               v-if="box.showInput"
-              style=""
             >
               cancel
             </button>

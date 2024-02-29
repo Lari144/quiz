@@ -37,3 +37,16 @@ export const updateRecord = async (supabaseClient, tableName, id, newTitle) => {
   if (error) throw error;
   return data;
 };
+
+export const addRecordAndSelectId = async (
+  supabaseClient,
+  tableName,
+  new_text
+) => {
+  const { error, data } = await supabaseClient
+    .from(tableName)
+    .insert({ text: new_text })
+    .select("id");
+  if (error) throw error;
+  return data[0].id;
+};
