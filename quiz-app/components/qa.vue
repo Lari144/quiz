@@ -1,22 +1,20 @@
 <template>
-  <button @click="closeModal">
-    cancel
-  </button>
-  <div
-    class="bg-darker-grey rounded-lg flex flex-col items-center justify-center p-3 text-white text-center"
-    style="width: 100%; height: 100%"
-  >
-  <input v-model="question" class="text-white input-base border-darker-grey focus:border-dark-purple"></input>
+  <button class="p-3" @click="closeModal">Cancel</button>
+  <div class="w-full bg-dark-bg rounded-lg shadow p-4">
+    <input
+      v-model="question"
+      class="w-full text-white p-4 bg-transparent border border-darker-grey focus:border-dark-purple rounded-md"
+      placeholder="Enter question here..."
+    />
   </div>
-  <div
-    class="bg-darker-grey rounded-lg flex flex-col items-center justify-center p-3 text-white text-center"
-    style="width: 100%; height: 100%"
-  >
-  <input v-model="answer" class="text-white input-base border-darker-grey focus:border-dark-purple"></input>
+  <div class="w-full bg-dark-bg rounded-lg shadow p-4">
+    <input
+      v-model="answer"
+      class="w-full text-white p-4 bg-transparent border border-darker-grey focus:border-dark-purple rounded-md"
+      placeholder="Enter answer here..."
+    />
   </div>
-  <button @click="submit">
-    add
-  </button>
+  <button class="p-3 text-lg text-white" @click="submit">Add</button>
 </template>
 
 <script setup>

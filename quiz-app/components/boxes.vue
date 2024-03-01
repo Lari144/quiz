@@ -18,14 +18,15 @@
       >
         <div class="flex justify-between" style="font-size: x-large">
           <button @click="deleteCard(box.id)">
-            <i class="fa fa-solid fa-trash" style="color: #b51313"></i>
+            <i
+              class="fa fa-solid fa-trash text-stone-800 hover:text-red-950"
+            ></i>
           </button>
           <div>
             <button @click="routeTo">
               <i
                 v-if="!box.showInput"
-                class="fa fa-solid fa-pencil"
-                style="color: white"
+                class="fa fa-solid fa-pencil text-slate-100 hover:text-gray-300"
               ></i>
             </button>
             <button

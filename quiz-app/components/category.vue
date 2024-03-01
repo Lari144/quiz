@@ -1,24 +1,25 @@
 <template>
-  <ClientOnly>
-    <div
-      style="
-        color: rgb(255, 255, 255);
-        width: 200px;
-        display: flex;
-        justify-content: flex-start;
-      "
+  <div
+    style="
+      color: rgb(255, 255, 255);
+      width: 200px;
+      display: flex;
+      justify-content: flex-start;
+    "
+  >
+    <button
+      @click="showModal = true"
+      class="btn bg-input-bg hover:bg-darker-grey"
     >
-      <button @click="showModal = true" class="btn bg-input-bg">
-        Create a category
-      </button>
-    </div>
-    <div v-if="showModal">
-      <ModalCategory
-        @update:showModal="showModal = $event"
-        @submit="addCategory"
-      />
-    </div>
-  </ClientOnly>
+      Create a category
+    </button>
+  </div>
+  <div v-if="showModal">
+    <ModalCategory
+      @update:showModal="showModal = $event"
+      @submit="addCategory"
+    />
+  </div>
 </template>
 
 <script setup lang="ts">

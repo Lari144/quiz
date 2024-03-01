@@ -1,32 +1,37 @@
 <template>
-  <div class="font-base text-[#333] bg-dark min-h-screen flex flex-col">
+  <div
+    class="font-base text-[#333] bg-dark min-h-screen flex flex-col start-from-top"
+  >
     <header class="w-full flex justify-between items-center px-4 py-4">
-      <button @click="routeTo" class="text-white font-semibold">Go back</button>
+      <button
+        @click="routeTo"
+        class="text-white hover:text-gray-300 font-semibold"
+      >
+        Go back
+      </button>
     </header>
-    <div class="w-full flex flex-col items-center py-4">
+    <div class="w-full flex flex-col items-center">
       <div
         v-for="(question, index) in questions"
         :key="index"
-        class="w-full bg-dark-bg rounded-lg shadow-md p-6 mb-4"
+        class="w-9/12 bg-darker-grey rounded-lg shadow-md p-3 mb-4 text-slate-100"
       >
         {{ question.text }}
         <div
           v-for="(answer, index) in filteredAnswers(question.id)"
           :key="index"
-          class="mt-2 p-2 bg-light-grey-p rounded-md"
+          class="mt-2 p-2 bg-input-bg rounded-md"
         >
           {{ answer.text }}
         </div>
-        <button class="mt-4 text-mid-purple hover:text-blue-700">
-          <i class="fa fa-pencil" aria-hidden="true"></i> Edit
-        </button>
       </div>
     </div>
-    <div v-if="showModal">
+    <div v-if="showModal" class="w-9/12 self-center">
       <Qa @update:showModal="showModal = $event" @submit="addQuestions" />
     </div>
     <button
-      class="w-11/12 bg-darker-grey hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full self-center"
+      v-if="!showModal"
+      class="w-6/12 bg-input-bg hover:bg-darker-grey text-mid-purple hover:text-dark-purple font-bold py-2 px-4 rounded-full self-center mt-4"
       @click="showModal = true"
     >
       +
@@ -84,3 +89,10 @@ const addAnwers = async (answer, id) => {
   }
 };
 </script>
+
+<style>
+.start-from-top {
+  align-items: flex-start;
+  justify-content: flex-start;
+}
+</style>
