@@ -38,6 +38,20 @@ export const updateRecord = async (supabaseClient, tableName, id, newTitle) => {
   return data;
 };
 
+export const updateQuestionAndAnswer = async (
+  supabaseClient,
+  tableName,
+  id,
+  newText
+) => {
+  const { error, data } = await supabaseClient
+    .from(tableName)
+    .update({ text: newText })
+    .eq("id", id);
+  if (error) throw error;
+  return data;
+};
+
 export const addRecordAndSelectId = async (
   supabaseClient,
   tableName,

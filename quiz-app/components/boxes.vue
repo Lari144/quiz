@@ -23,7 +23,7 @@
             ></i>
           </button>
           <div>
-            <button @click="routeTo">
+            <button @click="routeTo('/home')">
               <i
                 v-if="!box.showInput"
                 class="fa fa-solid fa-pencil text-slate-100 hover:text-gray-300"
@@ -56,11 +56,12 @@
           />
         </div>
         <div class="flex justify-end" style="font-size: x-large">
-          <button v-if="!box.showInput" class="mr-4">
+          <button @click="routeTo('/start')" v-if="!box.showInput" class="mr-4">
             <i class="fa fa-solid fa-play" style="color: white"></i>
           </button>
           <button>
             <i
+              @click="routeTo('/study')"
               v-if="!box.showInput"
               class="fa fa-solid fa-graduation-cap"
               style="color: white"
@@ -139,8 +140,8 @@ const updateCard = async (box, index) => {
   }
 };
 
-const routeTo = () => {
-  navigateTo("/home");
+const routeTo = (path) => {
+  navigateTo(path);
 };
 
 const toggleInput = (box) => {

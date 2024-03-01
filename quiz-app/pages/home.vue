@@ -12,17 +12,41 @@
     </header>
     <div class="w-full flex flex-col items-center">
       <div
+        @dblclick="toggleInput(question)"
         v-for="(question, index) in questions"
         :key="index"
         class="w-9/12 bg-darker-grey rounded-lg shadow-md p-3 mb-4 text-slate-100"
       >
-        {{ question.text }}
+        <div v-if="!question.showInput">
+          {{ question.text }}
+        </div>
+        <div v-if="question.showInput">
+          <input
+            class="w-10/12 text-white p-2 bg-darker-grey border border-input-bg focus:border-dark-purple rounded-md"
+            v-model="newQuestion"
+          />
+          <button @click="updateQuestion(question, question.id)" class="ml-4">
+            save
+          </button>
+        </div>
         <div
+          @dblclick.stop="toggleInput(answer)"
           v-for="(answer, index) in filteredAnswers(question.id)"
           :key="index"
           class="mt-2 p-2 bg-input-bg rounded-md"
         >
-          {{ answer.text }}
+          <div v-if="!answer.showInput">
+            {{ answer.text }}
+          </div>
+          <div v-if="answer.showInput">
+            <input
+              class="w-10/12 text-white p-2 bg-input-bg border border-darker-grey focus:border-dark-purple rounded-md"
+              v-model="newAnswer"
+            />
+            <button @click="updateAnswer(answer, answer.id)" class="ml-4">
+              save
+            </button>
+          </div>
         </div>
       </div>
     </div>
@@ -39,17 +63,24 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import {
   addRecord,
   fetchRecords,
   addRecordAndSelectId,
+  updateQuestionAndAnswer,
 } from "~/components/dbServices";
 
 const questions = ref([]);
 const supabase = useSupabaseClient();
 const answers = ref([]);
 const showModal = ref(false);
+const newQuestion = ref("");
+const newAnswer = ref("");
+
+const toggleInput = (item) => {
+  item.showInput = !item.showInput;
+};
 
 const routeTo = () => {
   navigateTo("/");
@@ -84,6 +115,27 @@ const addAnwers = async (answer, id) => {
   const anwer_data = { text: answer, question_id: id };
   try {
     await addRecord(supabase, "answers", anwer_data);
+  } catch (error) {
+    console.error("Error adding record:", error.message);
+  }
+};
+
+const updateQuestion = async (question, id) => {
+  try {
+    await updateQuestionAndAnswer(supabase, "questions", id, newQuestion.value);
+    await refreshData();
+    toggleInput(question);
+  } catch (error) {
+    console.error("Error adding record:", error.message);
+  }
+};
+
+const updateAnswer = async (answer, id) => {
+  try {
+    console.log(id, answer);
+    await updateQuestionAndAnswer(supabase, "answers", id, newAnswer.value);
+    await refreshData();
+    toggleInput(answer);
   } catch (error) {
     console.error("Error adding record:", error.message);
   }
