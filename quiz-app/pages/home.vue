@@ -1,4 +1,8 @@
 <template>
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
+  />
   <div
     class="font-base text-[#333] bg-dark min-h-screen flex flex-col start-from-top"
   >
@@ -47,6 +51,11 @@
               save
             </button>
           </div>
+          <button @click="deleteQA(answer.id, question.id)">
+            <i
+              class="fa fa-solid fa-trash text-stone-800 hover:text-red-950"
+            ></i>
+          </button>
         </div>
       </div>
     </div>
@@ -69,6 +78,7 @@ import {
   fetchRecords,
   addRecordAndSelectId,
   updateQuestionAndAnswer,
+  deleteRecord,
 } from "~/components/dbServices";
 
 const questions = ref([]);
@@ -136,6 +146,16 @@ const updateAnswer = async (answer, id) => {
     await updateQuestionAndAnswer(supabase, "answers", id, newAnswer.value);
     await refreshData();
     toggleInput(answer);
+  } catch (error) {
+    console.error("Error adding record:", error.message);
+  }
+};
+
+const deleteQA = async (answer_id, question_id) => {
+  try {
+    await deleteRecord(supabase, "answers", answer_id);
+    await deleteRecord(supabase, "questions", question_id);
+    await refreshData();
   } catch (error) {
     console.error("Error adding record:", error.message);
   }
