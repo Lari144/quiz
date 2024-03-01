@@ -1,5 +1,5 @@
 <template>
-  <button class="p-3" @click="closeModal">Cancel</button>
+  <button class="p-3 hover:text-slate-200" @click="closeModal">Cancel</button>
   <div class="w-full bg-dark-bg rounded-lg shadow p-4">
     <input
       v-model="question"
@@ -14,7 +14,12 @@
       placeholder="Enter answer here..."
     />
   </div>
-  <button class="p-3 text-lg text-white" @click="submit">Add</button>
+  <button
+    class="btn btn-purple custom-width text-lg text-white"
+    @click="submit"
+  >
+    Add
+  </button>
 </template>
 
 <script setup>
@@ -32,3 +37,12 @@ const submit = () => {
   closeModal();
 };
 </script>
+
+<style>
+.custom-width {
+  width: 120px;
+  margin-left: auto;
+  margin-right: auto;
+  display: block;
+}
+</style>

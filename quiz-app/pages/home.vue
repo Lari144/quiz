@@ -21,6 +21,9 @@
         :key="index"
         class="w-9/12 bg-darker-grey rounded-lg shadow-md p-3 mb-4 text-slate-100"
       >
+        <button @click="deleteQA(question.id)" class="float-right">
+          <i class="fa fa-solid fa-trash text-stone-800 hover:text-red-950"></i>
+        </button>
         <div v-if="!question.showInput">
           {{ question.text }}
         </div>
@@ -51,11 +54,6 @@
               save
             </button>
           </div>
-          <button @click="deleteQA(answer.id, question.id)">
-            <i
-              class="fa fa-solid fa-trash text-stone-800 hover:text-red-950"
-            ></i>
-          </button>
         </div>
       </div>
     </div>
@@ -151,13 +149,18 @@ const updateAnswer = async (answer, id) => {
   }
 };
 
-const deleteQA = async (answer_id, question_id) => {
+const deleteQA = async (question_id) => {
   try {
-    await deleteRecord(supabase, "answers", answer_id);
+    const relatedAnswers = answers.value.filter(
+      (answer) => answer.question_id === question_id
+    );
+    for (let answer of relatedAnswers) {
+      await deleteRecord(supabase, "answers", answer.id);
+    }
     await deleteRecord(supabase, "questions", question_id);
     await refreshData();
   } catch (error) {
-    console.error("Error adding record:", error.message);
+    console.error("Error deleting record:", error.message);
   }
 };
 </script>
