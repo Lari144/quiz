@@ -66,10 +66,11 @@ export const updateQuestionWithPicture = async (
   return data;
 };
 
-export const fetchPublicUrl = async (supabaseClient, userUid, fileName) => {
+export const fetchPublicUrl = async (supabaseClient, userUid, file) => {
   const { data, error } = await supabaseClient.storage
     .from("pictures")
-    .getPublicUrl(`${userUid}/${fileName}`);
+    .getPublicUrl(`${userUid}/${file.name}`);
+  console.log(file.name);
   if (error) throw error;
   return data.publicUrl;
 };

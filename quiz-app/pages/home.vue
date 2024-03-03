@@ -21,12 +21,11 @@
         :key="index"
         class="w-9/12 bg-darker-grey rounded-lg shadow-md p-3 mb-4 text-slate-100"
       >
+        <button @click="deletePicture(question.id)" class="float-right">
+          <i class="fa fa-solid fa-trash text-stone-800 hover:text-red-950"></i>
+        </button>
         <div v-if="question.picture_url" class="image-container">
-          <img
-            :src="question.picture_url"
-            alt="Uploaded Image"
-            class="max-w-full h-auto"
-          />
+          <img :src="question.picture_url" alt="Uploaded Image" />
         </div>
         <input
           type="file"
@@ -100,8 +99,8 @@ const answers = ref([]);
 const showModal = ref(false);
 const newQuestion = ref("");
 const newAnswer = ref("");
-const file = ref(null);
 const user = useSupabaseUser();
+let fileInput = ref(null);
 
 const toggleInput = (item) => {
   item.showInput = !item.showInput;
@@ -126,9 +125,17 @@ const refreshData = async () => {
 
 onMounted(refreshData);
 
+const deletePicture = async (question_id) => {
+  try {
+    await updateQuestionWithPicture(supabase, "questions", question_id, "");
+    await refreshData();
+  } catch (error) {
+    console.error("Error uploading picture:", error.message);
+  }
+};
 const addPicture = async (event, question_id) => {
   if (event.target.files.length > 0) {
-    const fileInput = event.target.files[0];
+    fileInput = event.target.files[0];
     try {
       await addFile(supabase, user.value?.id, fileInput);
       const url = await fetchPublicUrl(supabase, user.value?.id, fileInput);
