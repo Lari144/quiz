@@ -10,7 +10,7 @@
         <button @click="logout" class="btn btn-purple m-0">Logout</button>
       </div>
     </header>
-    <div class="flex-grow px-4">
+    <div class="flex-grow px-4 flex flex-col items-start">
       <Category />
       <Boxes />
     </div>
@@ -34,3 +34,11 @@ const logout = async () => {
   }
 };
 </script>
+
+<style>
+.flex-grow {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start; /* Align children to the start (left) */
+}
+</style>

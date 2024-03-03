@@ -21,7 +21,11 @@
         :key="index"
         class="w-9/12 bg-darker-grey rounded-lg shadow-md p-3 mb-4 text-slate-100"
       >
-        <button @click="deletePicture(question.id)" class="float-right">
+        <button
+          v-if="question.picture_url"
+          @click="deletePicture(question.id)"
+          class="float-right"
+        >
           <i class="fa fa-solid fa-trash text-stone-800 hover:text-red-950"></i>
         </button>
         <div v-if="question.picture_url" class="image-container">
