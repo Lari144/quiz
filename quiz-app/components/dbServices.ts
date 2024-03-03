@@ -52,6 +52,28 @@ export const updateQuestionAndAnswer = async (
   return data;
 };
 
+export const updateQuestionWithPicture = async (
+  supabaseClient,
+  tableName,
+  id,
+  url
+) => {
+  const { error, data } = await supabaseClient
+    .from(tableName)
+    .update({ picture_url: url })
+    .eq("id", id);
+  if (error) throw error;
+  return data;
+};
+
+export const fetchPublicUrl = async (supabaseClient, userUid, fileName) => {
+  const { data, error } = await supabaseClient.storage
+    .from("pictures")
+    .getPublicUrl(`${userUid}/${fileName}`);
+  if (error) throw error;
+  return data.publicUrl;
+};
+
 export const addRecordAndSelectId = async (
   supabaseClient,
   tableName,
@@ -63,4 +85,22 @@ export const addRecordAndSelectId = async (
     .select("id");
   if (error) throw error;
   return data[0].id;
+};
+
+export const addFile = async (supabaseClient, user_uid, file) => {
+  const { data, error } = await supabaseClient.storage
+    .from("pictures")
+    .upload(`${user_uid}/${file.name}`, file, {
+      upsert: true,
+    });
+  if (error) throw error;
+  return data;
+};
+
+export const fetchFile = async (supabaseClient, user_uid) => {
+  const { data, error } = await supabaseClient.storage
+    .from("pictures")
+    .list(`${user_uid}`);
+  if (error) throw error;
+  return data;
 };
