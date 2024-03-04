@@ -6,16 +6,16 @@
   <div
     class="font-base text-[#333] bg-dark min-h-screen flex flex-col start-from-top"
   >
-    <header class="w-full flex justify-between items-center px-4 py-4">
+    <header class="w-full flex justify-between items-start px-4 pt-2">
       <button
         @click="routeTo"
-        class="text-white hover:text-gray-300 font-semibold"
+        class="text-white hover:text-gray-300 font-semibold text-xl"
       >
         Go back
       </button>
     </header>
-    <div class="w-full flex flex-col items-center">
-      <div class="card-container">
+    <div class="flex-grow w-full p-4">
+      <div class="flex flex-col items-center justify-center py-36">
         <div
           class="card rounded-xl"
           :class="{ flipped: currentQuestion.flipped }"

@@ -3,17 +3,11 @@
     rel="stylesheet"
     href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
   />
-  <div class="p-12">
-    <div
-      @click="showModal = true"
-      class="cursor-pointer flex justify-center items-center w-80 h-64 bg-input-bg rounded-lg text-4xl text-mid-purple hover:text-dark-purple hover:bg-darker-grey transition-colors"
-    >
-      +
-    </div>
+  <div class="flex flex-wrap gap-4 p-4">
     <div
       v-for="(box, index) in boxes"
       :key="index"
-      class="w-80 h-64 bg-darker-grey rounded-lg flex flex-col justify-between p-3"
+      class="w-80 h-64 bg-darker-grey rounded-lg flex flex-col justify-between p-2"
     >
       <div class="flex justify-between" style="font-size: x-large">
         <button @click="deleteCard(box.id)">
@@ -27,7 +21,7 @@
             ></i>
           </button>
           <button
-            class="text-gray-300 text-lg hover:text-red-500"
+            class="text-gray-300 text-lg hover:text-red-950"
             @click="toggleInput(box)"
             v-if="box.showInput"
           >
@@ -53,15 +47,18 @@
         />
       </div>
       <div class="flex justify-end" style="font-size: x-large">
-        <button @click="routeTo('/start')" v-if="!box.showInput" class="mr-4">
-          <i class="fa fa-solid fa-play" style="color: white"></i>
+        <button
+          @click="routeTo('/start')"
+          v-if="!box.showInput"
+          class="mr-4 text-white hover:text-gray-300"
+        >
+          <i class="fa fa-solid fa-play"></i>
         </button>
-        <button>
+        <button class="mr-4 text-white hover:text-gray-300">
           <i
             @click="routeTo('/study')"
             v-if="!box.showInput"
             class="fa fa-solid fa-graduation-cap"
-            style="color: white"
           ></i>
         </button>
         <button
@@ -72,6 +69,12 @@
           save
         </button>
       </div>
+    </div>
+    <div
+      @click="showModal = true"
+      class="cursor-pointer flex justify-center items-center w-80 h-64 bg-input-bg rounded-lg text-4xl text-mid-purple hover:text-dark-purple hover:bg-darker-grey transition-colors"
+    >
+      +
     </div>
   </div>
   <div v-if="showModal">

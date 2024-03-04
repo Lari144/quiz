@@ -5,6 +5,7 @@
       width: 200px;
       display: flex;
       justify-content: flex-start;
+      margin-left: 15px;
     "
   >
     <button

@@ -10,7 +10,7 @@
         <button @click="logout" class="btn btn-purple m-0">Logout</button>
       </div>
     </header>
-    <div class="flex-grow px-4 flex flex-col items-start">
+    <div class="flex-grow w-full p-4">
       <Category />
       <Boxes />
     </div>
