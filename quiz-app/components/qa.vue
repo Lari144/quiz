@@ -38,7 +38,7 @@ const submit = () => {
 };
 </script>
 
-<style>
+<style scoped>
 .custom-width {
   width: 120px;
   margin-left: auto;

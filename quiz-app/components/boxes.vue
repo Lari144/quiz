@@ -4,77 +4,73 @@
     href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
   />
   <div class="p-12">
-    <div class="flex flex-wrap gap-4">
-      <div
-        @click="showModal = true"
-        class="cursor-pointer flex justify-center items-center w-80 h-64 bg-input-bg rounded-lg text-4xl text-mid-purple hover:text-dark-purple hover:bg-darker-grey transition-colors"
-      >
-        +
-      </div>
-      <div
-        v-for="(box, index) in boxes"
-        :key="index"
-        class="w-80 h-64 bg-darker-grey rounded-lg flex flex-col justify-between p-3"
-      >
-        <div class="flex justify-between" style="font-size: x-large">
-          <button @click="deleteCard(box.id)">
-            <i
-              class="fa fa-solid fa-trash text-stone-800 hover:text-red-950"
-            ></i>
-          </button>
-          <div>
-            <button @click="routeTo('/home')">
-              <i
-                v-if="!box.showInput"
-                class="fa fa-solid fa-pencil text-slate-100 hover:text-gray-300"
-              ></i>
-            </button>
-            <button
-              class="text-gray-300 text-lg hover:text-red-500"
-              @click="toggleInput(box)"
-              v-if="box.showInput"
-            >
-              cancel
-            </button>
-          </div>
-        </div>
+    <div
+      @click="showModal = true"
+      class="cursor-pointer flex justify-center items-center w-80 h-64 bg-input-bg rounded-lg text-4xl text-mid-purple hover:text-dark-purple hover:bg-darker-grey transition-colors"
+    >
+      +
+    </div>
+    <div
+      v-for="(box, index) in boxes"
+      :key="index"
+      class="w-80 h-64 bg-darker-grey rounded-lg flex flex-col justify-between p-3"
+    >
+      <div class="flex justify-between" style="font-size: x-large">
+        <button @click="deleteCard(box.id)">
+          <i class="fa fa-solid fa-trash text-stone-800 hover:text-red-950"></i>
+        </button>
         <div>
-          <div
-            v-if="!box.showInput"
-            @dblclick="toggleInput(box)"
-            class="flex justify-center"
-            style="color: white; font-size: xx-large"
-          >
-            {{ box.title }}
-          </div>
-          <input
-            class="text-white input-base border-darker-grey focus:border-dark-purple"
-            v-if="box.showInput"
-            v-model="newCardTitle"
-            type="text"
-            style="font-size: large"
-          />
-        </div>
-        <div class="flex justify-end" style="font-size: x-large">
-          <button @click="routeTo('/start')" v-if="!box.showInput" class="mr-4">
-            <i class="fa fa-solid fa-play" style="color: white"></i>
-          </button>
-          <button>
+          <button @click="routeTo('/home')">
             <i
-              @click="routeTo('/study')"
               v-if="!box.showInput"
-              class="fa fa-solid fa-graduation-cap"
-              style="color: white"
+              class="fa fa-solid fa-pencil text-slate-100 hover:text-gray-300"
             ></i>
           </button>
           <button
-            class="text-gray-300 text-xl hover:text-white"
-            @click="updateCard(box, box.id)"
+            class="text-gray-300 text-lg hover:text-red-500"
+            @click="toggleInput(box)"
             v-if="box.showInput"
           >
-            save
+            cancel
           </button>
         </div>
+      </div>
+      <div>
+        <div
+          v-if="!box.showInput"
+          @dblclick="toggleInput(box)"
+          class="flex justify-center"
+          style="color: white; font-size: xx-large"
+        >
+          {{ box.title }}
+        </div>
+        <input
+          class="text-white input-base border-darker-grey focus:border-dark-purple"
+          v-if="box.showInput"
+          v-model="newCardTitle"
+          type="text"
+          style="font-size: large"
+        />
+      </div>
+      <div class="flex justify-end" style="font-size: x-large">
+        <button @click="routeTo('/start')" v-if="!box.showInput" class="mr-4">
+          <i class="fa fa-solid fa-play" style="color: white"></i>
+        </button>
+        <button>
+          <i
+            @click="routeTo('/study')"
+            v-if="!box.showInput"
+            class="fa fa-solid fa-graduation-cap"
+            style="color: white"
+          ></i>
+        </button>
+        <button
+          class="text-gray-300 text-xl hover:text-white"
+          @click="updateCard(box, box.id)"
+          v-if="box.showInput"
+        >
+          save
+        </button>
       </div>
     </div>
   </div>

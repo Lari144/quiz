@@ -35,10 +35,10 @@ const logout = async () => {
 };
 </script>
 
-<style>
+<style scoped>
 .flex-grow {
   display: flex;
   flex-direction: column;
-  align-items: flex-start; /* Align children to the start (left) */
+  align-items: flex-start;
 }
 </style>

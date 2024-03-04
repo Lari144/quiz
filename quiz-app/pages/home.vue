@@ -212,7 +212,7 @@ const deleteQA = async (question_id) => {
 };
 </script>
 
-<style>
+<style scoped>
 .start-from-top {
   align-items: flex-start;
   justify-content: flex-start;
