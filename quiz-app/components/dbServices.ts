@@ -1,3 +1,5 @@
+import { Console } from "console";
+
 export const addRecord = async (supabaseClient, tableName, data) => {
   const { error, data: insertedData } = await supabaseClient
     .from(tableName)
@@ -6,8 +8,26 @@ export const addRecord = async (supabaseClient, tableName, data) => {
   return insertedData;
 };
 
+export const fetchRecordsCards = async (supabaseClient, tableName, user) => {
+  const { error, data } = await supabaseClient
+    .from(tableName)
+    .select()
+    .eq("user", user);
+  if (error) throw error;
+  return data;
+};
+
 export const fetchRecords = async (supabaseClient, tableName) => {
   const { error, data } = await supabaseClient.from(tableName).select();
+  if (error) throw error;
+  return data;
+};
+
+export const fetchRecordsQuestions = async (supabaseClient, card_id) => {
+  const { error, data } = await supabaseClient
+    .from("questions")
+    .select()
+    .eq("card_id", card_id);
   if (error) throw error;
   return data;
 };
@@ -78,11 +98,12 @@ export const fetchPublicUrl = async (supabaseClient, userUid, file) => {
 export const addRecordAndSelectId = async (
   supabaseClient,
   tableName,
-  new_text
+  new_text,
+  card_id
 ) => {
   const { error, data } = await supabaseClient
     .from(tableName)
-    .insert({ text: new_text })
+    .insert({ text: new_text, card_id: card_id })
     .select("id");
   if (error) throw error;
   return data[0].id;

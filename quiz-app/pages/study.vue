@@ -15,15 +15,27 @@
       </button>
     </header>
     <div class="flex-grow w-full p-4">
-      <div class="flex flex-col items-center justify-center py-36">
+      <div
+        v-if="questions.length > 0"
+        class="flex flex-col items-center justify-center py-36"
+      >
         <div
           class="card rounded-xl"
           :class="{ flipped: currentQuestion.flipped }"
           @click="flipCard"
         >
-          <div class="front">
-            {{ currentQuestion.public_url }}
-            {{ currentQuestion.text }}
+          <div class="front flex flex-col">
+            <div v-if="currentQuestion.picture_url">
+              <img
+                class="w-full mb-4"
+                :src="currentQuestion.picture_url"
+                alt="Uploaded Image"
+              />
+            </div>
+            <div>
+              {{ currentQuestion.public_url }}
+              {{ currentQuestion.text }}
+            </div>
           </div>
           <div class="back">
             {{ currentAnswer.text }}
@@ -38,25 +50,32 @@
           </button>
         </div>
       </div>
+      <div v-else class="text-white text-center p-80 text-5xl">
+        No cards yet
+      </div>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { fetchRecords } from "~/components/dbServices";
+import { fetchRecords, fetchRecordsQuestions } from "~/components/dbServices";
+import { useBoxStore } from "../store/box";
+
 const questions = ref([]);
 const answers = ref([]);
 const supabase = useSupabaseClient();
 const currentIndex = ref(0);
 const currentQuestion = ref({});
 const currentAnswer = ref({});
+const { cardId } = useBoxStore();
 
 const routeTo = () => {
   navigateTo("/");
 };
 
 const fetchData = async () => {
-  questions.value = await fetchRecords(supabase, "questions");
+  console.log(cardId);
+  questions.value = await fetchRecordsQuestions(supabase, cardId);
   answers.value = await fetchRecords(supabase, "answers");
   if (questions.value.length > 0) {
     updateCurrentQA();

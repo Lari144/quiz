@@ -90,12 +90,16 @@ import {
   addRecord,
   fetchRecords,
   addRecordAndSelectId,
+  fetchRecordsQuestions,
   updateQuestionAndAnswer,
   deleteRecord,
   updateQuestionWithPicture,
   addFile,
   fetchPublicUrl,
 } from "~/components/dbServices";
+import { useBoxStore } from "../store/box";
+
+const { cardId } = useBoxStore();
 
 const questions = ref([]);
 const supabase = useSupabaseClient();
@@ -120,7 +124,7 @@ const filteredAnswers = (questionId) => {
 
 const refreshData = async () => {
   try {
-    questions.value = await fetchRecords(supabase, "questions");
+    questions.value = await fetchRecordsQuestions(supabase, cardId);
     answers.value = await fetchRecords(supabase, "answers");
   } catch (error) {
     console.error("Error fetching records:", error);
@@ -158,7 +162,12 @@ const addPicture = async (event, question_id) => {
 
 const addQuestions = async ({ question, answer }) => {
   try {
-    const id = await addRecordAndSelectId(supabase, "questions", question);
+    const id = await addRecordAndSelectId(
+      supabase,
+      "questions",
+      question,
+      cardId
+    );
     await addAnwers(answer, id);
     await refreshData();
   } catch (error) {
@@ -218,3 +227,4 @@ const deleteQA = async (question_id) => {
   justify-content: flex-start;
 }
 </style>
+../../store/box

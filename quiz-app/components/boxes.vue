@@ -14,7 +14,7 @@
           <i class="fa fa-solid fa-trash text-stone-800 hover:text-red-950"></i>
         </button>
         <div>
-          <button @click="routeTo('/home')">
+          <button @click="routeTo(box.id, '/home')">
             <i
               v-if="!box.showInput"
               class="fa fa-solid fa-pencil text-slate-100 hover:text-gray-300"
@@ -48,7 +48,7 @@
       </div>
       <div class="flex justify-end" style="font-size: x-large">
         <button
-          @click="routeTo('/start')"
+          @click="routeTo(box.id, '/start')"
           v-if="!box.showInput"
           class="mr-4 text-white hover:text-gray-300"
         >
@@ -56,7 +56,7 @@
         </button>
         <button class="mr-4 text-white hover:text-gray-300">
           <i
-            @click="routeTo('/study')"
+            @click="routeTo(box.id, '/study')"
             v-if="!box.showInput"
             class="fa fa-solid fa-graduation-cap"
           ></i>
@@ -85,19 +85,22 @@
 <script setup lang="ts">
 import {
   addRecord,
-  fetchRecords,
+  fetchRecordsCards,
   deleteRecord,
   updateRecord,
 } from "./dbServices";
+import { useBoxStore } from "../store/box";
 
 const boxes = ref([]);
 const supabase = useSupabaseClient();
 const showModal = ref(false);
 const newCardTitle = ref("");
+const user = useSupabaseUser();
+const store = useBoxStore();
 
 const refreshData = async () => {
   try {
-    boxes.value = await fetchRecords(supabase, "cards");
+    boxes.value = await fetchRecordsCards(supabase, "cards", user.value?.id);
   } catch (error) {
     console.error("Error fetching records:", error);
   }
@@ -106,9 +109,8 @@ const refreshData = async () => {
 onMounted(refreshData);
 
 const addCard = async ({ name, category }) => {
-  console.log(name, category);
   const tableName = "cards";
-  const data = { title: name };
+  const data = { title: name, user: user.value?.id };
   try {
     await addRecord(supabase, tableName, data);
     await refreshData();
@@ -139,7 +141,8 @@ const updateCard = async (box, index) => {
   }
 };
 
-const routeTo = (path) => {
+const routeTo = (cardId, path) => {
+  store.setCardId(cardId);
   navigateTo(path);
 };
 
