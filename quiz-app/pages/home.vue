@@ -46,6 +46,7 @@
           <input
             class="w-10/12 text-white p-2 bg-darker-grey border border-input-bg focus:border-dark-purple rounded-md"
             v-model="newQuestion"
+            maxlength="50"
           />
           <button @click="updateQuestion(question, question.id)" class="ml-4">
             save
@@ -64,6 +65,7 @@
             <input
               class="w-10/12 text-white p-2 bg-input-bg border border-darker-grey focus:border-dark-purple rounded-md"
               v-model="newAnswer"
+              maxlength="50"
             />
             <button @click="updateAnswer(answer, answer.id)" class="ml-4">
               save
@@ -141,6 +143,7 @@ const deletePicture = async (question_id) => {
     console.error("Error uploading picture:", error.message);
   }
 };
+
 const addPicture = async (event, question_id) => {
   if (event.target.files.length > 0) {
     fileInput = event.target.files[0];
@@ -227,4 +230,3 @@ const deleteQA = async (question_id) => {
   justify-content: flex-start;
 }
 </style>
-../../store/box

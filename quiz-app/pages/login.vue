@@ -54,6 +54,7 @@
                 type="username"
                 class="input-base input-email"
                 placeholder="Enter username"
+                required
               />
             </div>
             <div class="mt-5">
@@ -63,6 +64,7 @@
                 type="email"
                 class="input-base input-email"
                 placeholder="Enter email"
+                required
               />
             </div>
             <div class="mt-5">
@@ -72,6 +74,7 @@
                 type="password"
                 class="input-base input-password"
                 placeholder="Enter password"
+                required
               />
             </div>
             <div class="mt-12">
