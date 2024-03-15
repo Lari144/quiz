@@ -37,7 +37,11 @@
 </template>
 
 <script setup lang="ts">
-import { fetchRecords, fetchRecordsQuestions } from "~/components/dbServices";
+import {
+  fetchRecords,
+  fetchRecordsQuestions,
+  updateAnswer,
+} from "~/components/dbServices";
 import { useBoxStore } from "../store/box";
 
 const questions = ref([]);
@@ -71,17 +75,21 @@ const nextQuestion = () => {
   }
 };
 
-const checkAnswer = () => {
+const checkAnswer = async () => {
   if (answer.value === currentAnswer.value.text) {
     if (currentIndex.value === questions.value.length - 1) {
       alert("Finished test");
       routeTo();
     } else {
-      nextQuestion();
-      answer.value = "";
+      useNuxtApp().$toast.success("Correct");
+      setTimeout(() => {
+        updateAnswer(supabase, "answers", currentAnswer.value.id);
+        nextQuestion();
+        answer.value = "";
+      }, 1000);
     }
   } else {
-    alert("Incorrect Answer");
+    useNuxtApp().$toast.error("Incorrect, try again");
     answer.value = "";
   }
 };

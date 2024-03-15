@@ -15,7 +15,7 @@
       </button>
     </header>
     <div class="flex-grow w-full">
-      <DragDrop />
+      <Check />
     </div>
   </div>
 </template>
