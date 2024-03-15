@@ -23,6 +23,16 @@ export const fetchRecords = async (supabaseClient, tableName) => {
   return data;
 };
 
+export const fetchRecordsTest = async (supabaseClient, tableName) => {
+  const { error, data } = await supabaseClient
+    .from(tableName)
+    .select()
+    .eq("is_correct", null);
+  console.log(data);
+  if (error) throw error;
+  return data;
+};
+
 export const fetchRecordsQuestions = async (supabaseClient, card_id) => {
   const { error, data } = await supabaseClient
     .from("questions")

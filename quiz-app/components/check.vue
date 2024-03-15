@@ -34,7 +34,7 @@
 
 <script setup lang="ts">
 import {
-  fetchRecords,
+  fetchRecordsTest,
   fetchRecordsQuestions,
   updateAnswer,
 } from "~/components/dbServices";
@@ -56,7 +56,7 @@ const routeTo = () => {
 const fetchData = async () => {
   console.log(cardId);
   questions.value = await fetchRecordsQuestions(supabase, cardId);
-  answers.value = await fetchRecords(supabase, "answers");
+  answers.value = await fetchRecordsTest(supabase, "answers");
   if (questions.value.length > 0) {
     updateCurrentQA();
   }
