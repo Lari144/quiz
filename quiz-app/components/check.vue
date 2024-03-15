@@ -3,30 +3,26 @@
     v-if="questions.length > 0"
     class="flex flex-col items-center justify-center py-24"
   >
-    <div>
-      <div>
-        <div v-if="currentQuestion.picture_url">
-          <img
-            class="w-full mb-4"
-            :src="currentQuestion.picture_url"
-            alt="Uploaded Image"
-          />
-        </div>
-        <div class="flex items-center justify-center py-10">
-          <div>
-            {{ currentQuestion.public_url }}
-          </div>
-          <div class="text-4xl text-slate-200">
-            {{ currentQuestion.text }}
-          </div>
-        </div>
+    <div class="flex flex-col items-center">
+      <div v-if="currentQuestion.picture_url" class="flex justify-center mb-4">
+        <img
+          class="object-contain"
+          style="max-height: 40%; max-width: 40%"
+          :src="currentQuestion.picture_url"
+          alt="Uploaded Image"
+        />
       </div>
-      <div>
-        <input
-          class="w-96 text-white input-base border-darker-grey focus:border-dark-purple"
+      <div class="flex flex-col items-center justify-center py-10 text-center">
+        <div>{{ currentQuestion.public_url }}</div>
+        <div class="text-4xl text-slate-200">{{ currentQuestion.text }}</div>
+      </div>
+      <div class="flex justify-center w-full px-4">
+        <textarea
+          class="textarea-base input-base text-white max-w-xs border-darker-grey focus:border-dark-purple overflow-hidden resize-none"
           placeholder="Enter the correct answer..."
           v-model="answer"
-        />
+          style="height: 150px; width: 400px"
+        ></textarea>
       </div>
     </div>
     <div class="text-white p-4">
@@ -103,3 +99,11 @@ const updateCurrentQA = () => {
   currentAnswer.value = answer || {};
 };
 </script>
+
+<style scoped>
+.textarea-base {
+  background: none;
+  padding: 10px;
+  display: block;
+}
+</style>
