@@ -11,17 +11,29 @@
     >
       <div class="flex justify-between" style="font-size: x-large">
         <button @click="deleteCard(box.id)">
-          <i class="fa fa-solid fa-trash text-stone-800 hover:text-red-950"></i>
+          <i
+            v-if="!box.showInput"
+            style="margin-left: 5px"
+            class="fa fa-solid fa-trash text-stone-800 hover:text-red-950"
+          ></i>
+          <div
+            class="text-gray-300 text-lg cursor-text"
+            v-if="box.showInput"
+            style="margin-left: 5px; text-decoration: underline"
+          >
+            Edit Mode
+          </div>
         </button>
         <div>
           <button @click="routeTo(box.id, '/home')">
             <i
+              style="margin-right: 6px"
               v-if="!box.showInput"
               class="fa fa-solid fa-pencil text-slate-100 hover:text-gray-300"
             ></i>
           </button>
           <button
-            class="text-gray-300 text-lg hover:text-red-950"
+            class="text-gray-300 text-lg hover:text-gray-500"
             @click="toggleInput(box)"
             v-if="box.showInput"
           >
@@ -56,6 +68,7 @@
         </button>
         <button class="mr-4 text-white hover:text-gray-300">
           <i
+            style="margin-right: -5px"
             @click="routeTo(box.id, '/study')"
             v-if="!box.showInput"
             class="fa fa-solid fa-graduation-cap"

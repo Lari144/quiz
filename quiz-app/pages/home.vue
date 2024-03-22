@@ -26,7 +26,7 @@
           @click="deletePicture(question.id)"
           class="float-right"
         >
-          <i class="fa fa-solid fa-trash text-stone-800 hover:text-red-950"></i>
+          <i class="text-stone-800 hover:text-red-950">Delete Picture</i>
         </button>
         <div v-if="question.picture_url" class="image-container">
           <img :src="question.picture_url" alt="Uploaded Image" />
@@ -48,7 +48,10 @@
             v-model="newQuestion"
             maxlength="50"
           />
-          <button @click="updateQuestion(question, question.id)" class="ml-4">
+          <button
+            @click="updateQuestion(question, question.id)"
+            class="ml-4 hover:text-white"
+          >
             save
           </button>
         </div>
@@ -67,7 +70,10 @@
               v-model="newAnswer"
               maxlength="50"
             />
-            <button @click="updateAnswer(answer, answer.id)" class="ml-4">
+            <button
+              @click="updateAnswer(answer, answer.id)"
+              class="ml-4 hover:text-white"
+            >
               save
             </button>
           </div>
@@ -79,6 +85,7 @@
     </div>
     <button
       v-if="!showModal"
+      style="margin-bottom: 20px"
       class="w-6/12 bg-input-bg hover:bg-darker-grey text-mid-purple hover:text-dark-purple font-bold py-2 px-4 rounded-full self-center mt-4"
       @click="showModal = true"
     >

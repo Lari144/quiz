@@ -11,6 +11,7 @@
           <div class="text-white">
             <label class="p-1">Add categories:</label>
             <input
+              style="margin-bottom: 15px"
               v-model="category"
               type="text"
               class="text-white input-base border-darker-grey focus:border-dark-purple"
@@ -34,7 +35,11 @@
           >
             Add
           </button>
-          <button type="button" @click="closeModal" class="ml-2 text-slate-300">
+          <button
+            type="button"
+            @click="closeModal"
+            class="ml-2 text-slate-300 hover:text-gray-500"
+          >
             Cancel
           </button>
         </div>
