@@ -186,7 +186,7 @@ const addQuestions = async ({ question, answer }) => {
 };
 
 const addAnwers = async (answer, id) => {
-  const anwer_data = { text: answer, question_id: id };
+  const anwer_data = { text: answer, question_id: id, is_correct: false };
   try {
     await addRecord(supabase, "answers", anwer_data);
   } catch (error) {

@@ -1,11 +1,27 @@
-import { Console } from "console";
-
 export const addRecord = async (supabaseClient, tableName, data) => {
   const { error, data: insertedData } = await supabaseClient
     .from(tableName)
     .insert([data]);
   if (error) throw error;
   return insertedData;
+};
+
+export const deleteQuestion = async (supabaseClient, tableName, id) => {
+  const { error, data } = await supabaseClient
+    .from(tableName)
+    .delete()
+    .eq("card_id", id);
+  if (error) throw error;
+  return data;
+};
+
+export const deleteAnswer = async (supabaseClient, tableName, id) => {
+  const { error, data } = await supabaseClient
+    .from(tableName)
+    .delete()
+    .eq("question_id", id);
+  if (error) throw error;
+  return data;
 };
 
 export const fetchRecordsCards = async (supabaseClient, tableName, user) => {
@@ -27,10 +43,29 @@ export const fetchRecordsTest = async (supabaseClient, tableName) => {
   const { error, data } = await supabaseClient
     .from(tableName)
     .select()
-    .eq("is_correct", null);
+    .eq("is_correct", false);
   console.log(data);
   if (error) throw error;
   return data;
+};
+
+export const fetchCorrectAnswers = async (supabaseClient, tableName) => {
+  const { error, data } = await supabaseClient
+    .from(tableName)
+    .select()
+    .eq("is_correct", true);
+  console.log(data);
+  if (error) throw error;
+  return data;
+};
+
+export const deleteCards = async (supabaseClient, cardId) => {
+  const questions = await fetchRecordsQuestions(supabaseClient, cardId);
+  for (const question of questions) {
+    await deleteAnswer(supabaseClient, "answers", question.id);
+  }
+  await deleteQuestion(supabaseClient, "questions", cardId);
+  await deleteRecord(supabaseClient, "cards", cardId);
 };
 
 export const fetchRecordsQuestions = async (supabaseClient, card_id) => {

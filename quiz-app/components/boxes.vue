@@ -59,6 +59,7 @@
         />
       </div>
       <div class="flex justify-end" style="font-size: x-large">
+        <Progress :card_id="box.id" />
         <button
           @click="routeTo(box.id, '/start')"
           v-if="!box.showInput"
@@ -99,10 +100,11 @@
 import {
   addRecord,
   fetchRecordsCards,
-  deleteRecord,
   updateRecord,
+  deleteCards,
 } from "./dbServices";
 import { useBoxStore } from "../store/box";
+import Progress from "./progress.vue";
 
 const boxes = ref([]);
 const supabase = useSupabaseClient();
@@ -133,12 +135,11 @@ const addCard = async ({ name, category }) => {
 };
 
 const deleteCard = async (index) => {
-  const tablename = "cards";
   try {
-    await deleteRecord(supabase, tablename, index);
+    await deleteCards(supabase, index);
     await refreshData();
   } catch (error) {
-    console.error("Error deleting record:", error.message);
+    console.error("Error deleting card:", error.message);
   }
 };
 
