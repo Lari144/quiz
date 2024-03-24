@@ -1,8 +1,8 @@
 <template>
-  <div class="w-full bg-gray-200 rounded-full dark:bg-gray-700">
+  <div class="w-full bg-dark-bg rounded-full">
     <div
       :style="{ width: progress + '%' }"
-      class="bg-blue-600 text-xs font-medium text-blue-100 text-center p-0.5 rounded-full"
+      class="bg-very-light-purple text-xs font-medium text-blue-100 text-center p-0.5 rounded-full"
     >
       {{ progress }}%
     </div>
@@ -34,7 +34,9 @@ const updateProgress = async () => {
   const totalAnswersCount = cardAnswers.length;
 
   const calculatedProgress =
-    totalAnswersCount > 0 ? (correctAnswersCount / totalAnswersCount) * 100 : 0;
+    totalAnswersCount > 0
+      ? Math.round((correctAnswersCount / totalAnswersCount) * 100)
+      : 0;
   progress.value = calculatedProgress;
 };
 

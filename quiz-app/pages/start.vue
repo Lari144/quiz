@@ -13,14 +13,38 @@
       >
         Go back
       </button>
+      <div>
+        <button
+          @click="showCheck"
+          class="text-white hover:text-gray-300 font-semibold text-xl"
+        >
+          Check
+        </button>
+        <button
+          @click="showMultipleChoice"
+          class="text-white hover:text-gray-300 font-semibold text-xl"
+        >
+          Multiple Choice
+        </button>
+      </div>
     </header>
     <div class="flex-grow w-full">
-      <Check />
+      <Check v-if="currentView === 'Check'" />
+      <MultipleChoice v-else-if="currentView === 'MultipleChoice'" />
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
+const currentView = ref("");
+
+const showCheck = () => {
+  currentView.value = "Check";
+};
+
+const showMultipleChoice = () => {
+  currentView.value = "MultipleChoice";
+};
 const routeTo = () => {
   navigateTo("/");
 };

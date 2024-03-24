@@ -3,6 +3,7 @@
     rel="stylesheet"
     href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
   />
+  <link rel="stylesheet" href="https://cdn.lordicon.com/lordicon.js" />
   <div class="flex flex-wrap gap-4 p-4">
     <div
       v-for="(box, index) in boxes"
@@ -58,27 +59,27 @@
           style="font-size: large"
         />
       </div>
-      <div class="flex justify-end" style="font-size: x-large">
-        <Progress :card_id="box.id" />
+      <div class="flex items-center justify-end space-x-5">
+        <Progress v-if="!box.showInput" :card_id="box.id" class="flex-grow" />
         <button
           @click="routeTo(box.id, '/start')"
           v-if="!box.showInput"
-          class="mr-4 text-white hover:text-gray-300"
+          class="text-xl text-white hover:text-gray-300"
         >
-          <i class="fa fa-solid fa-play"></i>
-        </button>
-        <button class="mr-4 text-white hover:text-gray-300">
-          <i
-            style="margin-right: -5px"
-            @click="routeTo(box.id, '/study')"
-            v-if="!box.showInput"
-            class="fa fa-solid fa-graduation-cap"
-          ></i>
+          TEST
         </button>
         <button
-          class="text-gray-300 text-xl hover:text-white"
+          @click="routeTo(box.id, '/study')"
+          v-if="!box.showInput"
+          style="margin-right: 5px"
+          class="text-xl text-white hover:text-gray-300"
+        >
+          <i class="fa fa-solid fa-graduation-cap"></i>
+        </button>
+        <button
           @click="updateCard(box, box.id)"
           v-if="box.showInput"
+          class="text-xl text-gray-300 hover:text-white"
         >
           save
         </button>

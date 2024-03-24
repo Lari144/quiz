@@ -17,16 +17,15 @@
         <div class="text-4xl text-slate-200">{{ currentQuestion.text }}</div>
       </div>
       <div class="flex justify-center w-full px-4">
-        <textarea
-          class="textarea-base input-base text-white max-w-xs border-darker-grey focus:border-dark-purple overflow-hidden resize-none"
-          placeholder="Enter the correct answer..."
-          v-model="answer"
-          style="height: 150px; width: 400px"
-        ></textarea>
+        <button
+          v-for="(choice, index) in answers"
+          :key="index"
+          class="m-2 btn"
+          @click="selectAnswer(choice)"
+        >
+          {{ choice.text }}
+        </button>
       </div>
-    </div>
-    <div class="text-white p-4">
-      <button class="hover:text-gray-300" @click="checkAnswer()">check</button>
     </div>
   </div>
   <div v-else class="text-white text-center p-80 text-5xl">No cards yet</div>
@@ -54,6 +53,7 @@ const cardId = boxStore.cardId;
 const fetchData = async () => {
   questions.value = await fetchRecordsQuestions(supabase, cardId);
   answers.value = await fetchRecordsTest(supabase, "answers");
+  console.log(answers.value);
   filterQuestions();
 };
 
@@ -85,15 +85,13 @@ const nextQuestion = () => {
   }
 };
 
-const checkAnswer = async () => {
-  if (answer.value === currentAnswer.value.text) {
+const selectAnswer = async (choice) => {
+  if (choice.text === currentAnswer.value.text) {
     useNuxtApp().$toast.success("Correct");
-    await updateAnswer(supabase, "answers", currentAnswer.value.id, true); // Assuming updateAnswer can mark the answer as correct
-    answer.value = "";
+    await updateAnswer(supabase, "answers", currentAnswer.value.id, true);
     nextQuestion();
   } else {
     useNuxtApp().$toast.error("Incorrect, try again");
-    answer.value = "";
   }
 };
 
@@ -101,11 +99,3 @@ const routeTo = () => {
   navigateTo("/");
 };
 </script>
-
-<style scoped>
-.textarea-base {
-  background: none;
-  padding: 10px;
-  display: block;
-}
-</style>
