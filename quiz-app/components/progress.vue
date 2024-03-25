@@ -10,12 +10,7 @@
 </template>
 
 <script setup lang="ts">
-import { defineProps, onMounted, ref } from "vue";
-import {
-  fetchRecords,
-  fetchRecordsQuestions,
-  fetchCorrectAnswers,
-} from "~/components/dbServices";
+import { fetchRecords, fetchRecordsQuestions } from "~/components/dbServices";
 
 const props = defineProps({ card_id: Number });
 const supabase = useSupabaseClient();
@@ -23,19 +18,27 @@ const progress = ref(0);
 
 const updateProgress = async () => {
   const questions = await fetchRecordsQuestions(supabase, props.card_id);
-
   const allAnswers = await fetchRecords(supabase, "answers");
-  const correct_answers = await fetchCorrectAnswers(supabase, "answers");
+
   const cardAnswers = allAnswers.filter((answer) =>
     questions.some((question) => question.id === answer.question_id)
   );
 
-  const correctAnswersCount = correct_answers.length;
-  const totalAnswersCount = cardAnswers.length;
+  let correctAnsweredQuestions = 0;
+  questions.forEach((question) => {
+    if (
+      cardAnswers.some(
+        (answer) => answer.question_id === question.id && answer.is_correct
+      )
+    ) {
+      correctAnsweredQuestions++;
+    }
+  });
 
+  const totalQuestionsCount = questions.length;
   const calculatedProgress =
-    totalAnswersCount > 0
-      ? Math.round((correctAnswersCount / totalAnswersCount) * 100)
+    totalQuestionsCount > 0
+      ? Math.round((correctAnsweredQuestions / totalQuestionsCount) * 100)
       : 0;
   progress.value = calculatedProgress;
 };

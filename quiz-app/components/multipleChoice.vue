@@ -46,7 +46,6 @@ const supabase = useSupabaseClient();
 const currentIndex = ref(0);
 const currentQuestion = ref({});
 const currentAnswer = ref({});
-const answer = ref("");
 const boxStore = useBoxStore();
 const cardId = boxStore.cardId;
 
