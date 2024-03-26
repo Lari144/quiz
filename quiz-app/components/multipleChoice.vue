@@ -18,7 +18,7 @@
       </div>
       <div class="flex justify-center w-full px-4">
         <button
-          v-for="(choice, index) in answers"
+          v-for="(choice, index) in randomAnswers"
           :key="index"
           class="m-2 btn"
           @click="selectAnswer(choice)"
@@ -36,24 +36,26 @@ import {
   fetchRecordsTest,
   fetchRecordsQuestions,
   updateAnswer,
+  fetchRecords,
 } from "~/components/dbServices";
-import { useNuxtApp, navigateTo } from "#imports";
 import { useBoxStore } from "../store/box";
 
+const supabase = useSupabaseClient();
+const boxStore = useBoxStore();
+const cardId = boxStore.cardId;
 const questions = ref([]);
 const answers = ref([]);
-const supabase = useSupabaseClient();
 const currentIndex = ref(0);
 const currentQuestion = ref({});
 const currentAnswer = ref({});
-const boxStore = useBoxStore();
-const cardId = boxStore.cardId;
+let randomAnswers = ref([]);
+const allQuestions = ref([]);
 
 const fetchData = async () => {
   questions.value = await fetchRecordsQuestions(supabase, cardId);
   answers.value = await fetchRecordsTest(supabase, "answers");
-  console.log(answers.value);
   filterQuestions();
+  randomAnswersAndCurrectAnswer();
 };
 
 const filterQuestions = () => {
@@ -65,13 +67,40 @@ const filterQuestions = () => {
   }
 };
 
+const randomAnswersAndCurrectAnswer = async () => {
+  allQuestions.value = await fetchRecordsQuestions(supabase, cardId);
+  const allAnswers = await fetchRecords(supabase, "answers");
+
+  const filteredAnswers = allAnswers.filter((answer) =>
+    allQuestions.value.some((question) => question.id === answer.question_id)
+  );
+
+  const filteredWithoutCurrent = filteredAnswers.filter(
+    (answer) => answer.id !== currentAnswer.value.id
+  );
+
+  randomAnswers.value = filteredWithoutCurrent.slice(0, 3);
+  randomAnswers.value.push(currentAnswer.value);
+  shuffleArray(randomAnswers.value);
+};
+
 onMounted(fetchData);
 
+const shuffleArray = (array) => {
+  for (let i = array.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [array[i], array[j]] = [array[j], array[i]];
+  }
+};
+
 const updateCurrentQA = () => {
-  let question = questions.value[currentIndex.value];
-  currentQuestion.value = { ...question, flipped: false };
-  let answer = answers.value.find((a) => a.question_id === question.id);
-  currentAnswer.value = answer || {};
+  if (currentIndex.value < questions.value.length) {
+    const question = questions.value[currentIndex.value];
+    currentQuestion.value = { ...question };
+    const answer = answers.value.find((a) => a.question_id === question.id);
+    currentAnswer.value = answer || {};
+    randomAnswersAndCurrectAnswer();
+  }
 };
 
 const nextQuestion = () => {
