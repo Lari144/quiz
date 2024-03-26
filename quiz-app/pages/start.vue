@@ -13,23 +13,40 @@
       >
         Go back
       </button>
-      <div>
-        <button
-          @click="showCheck"
-          class="text-white hover:text-gray-300 font-semibold text-xl"
-        >
-          Check
-        </button>
-        <button
-          @click="showMultipleChoice"
-          class="text-white hover:text-gray-300 font-semibold text-xl"
-        >
-          Multiple Choice
-        </button>
-      </div>
     </header>
-    <div class="flex-grow w-full">
-      <Check v-if="currentView === 'Check'" />
+    <div class="flex-grow w-full flex items-center justify-center">
+      <div v-if="!currentView" class="text-center">
+        <h1 class="text-white text-2xl">Select an option to get started</h1>
+        <div class="p-20">
+          <button
+            @click="showCheck"
+            class="text-white hover:bg-light-purple bg-input-bg font-semibold m-2 btn"
+          >
+            Check
+          </button>
+          <button
+            @click="showCheck"
+            class="hover:bg-light-purple bg-input-bg font-semibold m-2 btn flex flex-col items-center justify-center"
+          >
+            <span class="text-white">Check</span>
+            <span class="font-light text-gray-300 text-sm">(with skips)</span>
+          </button>
+          <button
+            @click="showMultipleChoice"
+            class="text-white hover:bg-light-purple bg-input-bg font-semibold m-2 btn"
+          >
+            Multiple Choice
+          </button>
+          <button
+            @click="showMultipleChoice"
+            class="hover:bg-light-purple bg-input-bg font-semibold m-2 btn flex flex-col items-center justify-center"
+          >
+            <span class="text-white">Multiple Choice</span>
+            <span class="text-gray-300 font-light text-sm">(with skips)</span>
+          </button>
+        </div>
+      </div>
+      <Check v-else-if="currentView === 'Check'" />
       <MultipleChoice v-else-if="currentView === 'MultipleChoice'" />
     </div>
   </div>
@@ -45,6 +62,7 @@ const showCheck = () => {
 const showMultipleChoice = () => {
   currentView.value = "MultipleChoice";
 };
+
 const routeTo = () => {
   navigateTo("/");
 };

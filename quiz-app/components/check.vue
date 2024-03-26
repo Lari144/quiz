@@ -36,7 +36,7 @@
       </button>
     </div>
   </div>
-  <div v-else class="text-white text-center p-80 text-5xl">No cards yet</div>
+  <div v-else class="text-white text-center p-38 text-5xl">No cards yet</div>
 </template>
 
 <script setup lang="ts">
