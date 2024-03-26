@@ -27,6 +27,13 @@
         </button>
       </div>
     </div>
+    <button
+      style="margin-left: 10px"
+      class="hover:text-gray-300"
+      @click="nextQuestion()"
+    >
+      Skip
+    </button>
   </div>
   <div v-else class="text-white text-center p-80 text-5xl">No cards yet</div>
 </template>
@@ -120,7 +127,8 @@ const selectAnswer = async (choice) => {
     await updateAnswer(supabase, "answers", currentAnswer.value.id, true);
     nextQuestion();
   } else {
-    useNuxtApp().$toast.error("Incorrect, try again");
+    useNuxtApp().$toast.error("Incorrect");
+    nextQuestion();
   }
 };
 

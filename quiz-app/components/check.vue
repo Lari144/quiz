@@ -27,6 +27,13 @@
     </div>
     <div class="text-white p-4">
       <button class="hover:text-gray-300" @click="checkAnswer()">check</button>
+      <button
+        style="margin-left: 10px"
+        class="hover:text-gray-300"
+        @click="nextQuestion()"
+      >
+        Skip
+      </button>
     </div>
   </div>
   <div v-else class="text-white text-center p-80 text-5xl">No cards yet</div>
@@ -84,6 +91,7 @@ const updateCurrentQA = () => {
 };
 
 const nextQuestion = () => {
+  answer.value = "";
   if (currentIndex.value < questions.value.length - 1) {
     currentIndex.value += 1;
     updateCurrentQA();
@@ -100,7 +108,7 @@ const checkAnswer = async () => {
     answer.value = "";
     nextQuestion();
   } else {
-    useNuxtApp().$toast.error("Incorrect, try again");
+    useNuxtApp().$toast.error("Incorrect");
     answer.value = "";
   }
 };
