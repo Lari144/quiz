@@ -62,6 +62,7 @@ const filterQuestions = () => {
   questions.value = questions.value.filter((q) =>
     answers.value.some((a) => a.question_id === q.id)
   );
+  shuffleArray(questions.value);
   if (questions.value.length > 0) {
     updateCurrentQA();
   }

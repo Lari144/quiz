@@ -61,12 +61,20 @@ const filterQuestions = () => {
   questions.value = questions.value.filter((q) =>
     answers.value.some((a) => a.question_id === q.id)
   );
+  shuffleArray(questions.value);
   if (questions.value.length > 0) {
     updateCurrentQA();
   }
 };
 
 onMounted(fetchData);
+
+const shuffleArray = (array) => {
+  for (let i = array.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [array[i], array[j]] = [array[j], array[i]];
+  }
+};
 
 const updateCurrentQA = () => {
   let question = questions.value[currentIndex.value];
