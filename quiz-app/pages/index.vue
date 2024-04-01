@@ -11,8 +11,11 @@
       </div>
     </header>
     <div class="flex-grow w-full p-4">
-      <Category />
-      <Boxes />
+      <Category
+        @input-value="handleInputValue"
+        @search-type-change="handleSearchTypeChange"
+      />
+      <Boxes :searchQuery="searchQuery" :searchType="searchType" />
     </div>
   </div>
 </template>
@@ -22,8 +25,17 @@ definePageMeta({
   middleware: "auth",
 });
 
+const searchQuery = ref("");
 const user = useSupabaseUser();
 const supaAuth = useSupabaseClient().auth;
+const searchType = ref("title");
+
+const handleSearchTypeChange = (value) => {
+  searchType.value = value;
+};
+const handleInputValue = (value) => {
+  searchQuery.value = value;
+};
 
 const logout = async () => {
   const { error } = await supaAuth.signOut();

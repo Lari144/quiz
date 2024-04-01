@@ -103,30 +103,67 @@ import {
   fetchRecordsCards,
   updateRecord,
   deleteCards,
+  fetchRecords,
 } from "./dbServices";
 import { useBoxStore } from "../store/box";
 import Progress from "./progress.vue";
 
 const boxes = ref([]);
+const categories = ref([]);
 const supabase = useSupabaseClient();
 const showModal = ref(false);
 const newCardTitle = ref("");
 const user = useSupabaseUser();
 const store = useBoxStore();
+let searchDebounceTimer: Number;
+
+const props = defineProps({ searchQuery: String, searchType: String });
 
 const refreshData = async () => {
+  if (props.searchQuery) {
+    const searchQueryLowercase = props.searchQuery.toLowerCase();
+
+    if (props.searchType === "title") {
+      boxes.value = boxes.value.filter((box) =>
+        box.title.toLowerCase().includes(searchQueryLowercase)
+      );
+    } else if (props.searchType === "category") {
+      const matchingCategories = categories.value.filter((c) =>
+        c.name.toLowerCase().includes(searchQueryLowercase)
+      );
+      boxes.value = boxes.value.filter((box) =>
+        matchingCategories.some((category) => category.id === box.category_id)
+      );
+    }
+  } else {
+    await fetchAllData();
+  }
+};
+
+const fetchAllData = async () => {
   try {
     boxes.value = await fetchRecordsCards(supabase, "cards", user.value?.id);
+    categories.value = await fetchRecords(supabase, "categories");
   } catch (error) {
     console.error("Error fetching records:", error);
   }
 };
 
-onMounted(refreshData);
+onMounted(() => {
+  fetchAllData();
+});
+
+watch([() => props.searchQuery, props.searchType], () => {
+  clearTimeout(searchDebounceTimer);
+  searchDebounceTimer = setTimeout(() => {
+    refreshData();
+  }, 500);
+});
 
 const addCard = async ({ name, category }) => {
   const tableName = "cards";
-  const data = { title: name, user: user.value?.id };
+  const category_ = categories.value.find((c) => c.name === category);
+  const data = { title: name, user: user.value?.id, category_id: category_.id };
   try {
     await addRecord(supabase, tableName, data);
     await refreshData();

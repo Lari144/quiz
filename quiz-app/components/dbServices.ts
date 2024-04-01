@@ -1,3 +1,5 @@
+import { title } from "process";
+
 export const addRecord = async (supabaseClient, tableName, data) => {
   const { error, data: insertedData } = await supabaseClient
     .from(tableName)
