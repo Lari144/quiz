@@ -44,6 +44,13 @@
             <span class="text-white">Multiple Choice</span>
             <span class="text-gray-300 font-light text-sm">(with skips)</span>
           </button>
+          <button
+            @click="showCheck"
+            class="hover:bg-light-purple bg-input-bg font-semibold m-2 mt-4 btn flex flex-col items-center justify-center"
+          >
+            <span class="text-white">New Test</span>
+            <span class="font-light text-gray-300 text-sm">(no progress)</span>
+          </button>
         </div>
       </div>
       <Check v-else-if="currentView === 'Check'" />

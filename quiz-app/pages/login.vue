@@ -106,7 +106,7 @@ const credentials = reactive<Credentials>({
 const login = async () => {
   const { error } = await supaAuth.signInWithPassword(credentials);
   if (error) {
-    alert(error.message);
+    useNuxtApp().$toast.error(error.message);
   } else {
     return navigateTo("/");
   }
@@ -123,7 +123,7 @@ const register = async () => {
     },
   });
   if (error) {
-    alert(error.message);
+    useNuxtApp().$toast.error(error.message);
   } else {
     return navigateTo("/");
   }

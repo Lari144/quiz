@@ -22,7 +22,7 @@
               v-model="category"
               class="input-base border-darker-grey focus:border-dark-purple"
             >
-              <option disabled value="">Please select one</option>
+              <option disabled value="">Select one category</option>
               <option v-for="item in categories">{{ item.name }}</option>
             </select>
           </div>

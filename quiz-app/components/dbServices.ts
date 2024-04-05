@@ -87,6 +87,15 @@ export const fetchRecordsCategorie = async (supabaseClient, tableName) => {
   return data;
 };
 
+export const set_incorrect = async (supabaseClient, id) => {
+  const { error, data } = await supabaseClient
+    .from("answers")
+    .update({ is_correct: false })
+    .eq("id", id);
+  if (error) throw error;
+  return data;
+};
+
 export const deleteRecord = async (supabaseClient, tableName, id) => {
   const { error, data } = await supabaseClient
     .from(tableName)
