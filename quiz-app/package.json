@@ -7,7 +7,9 @@
     "dev": "nuxt dev --dotenv .env",
     "generate": "nuxt generate",
     "preview": "nuxt preview",
-    "postinstall": "nuxt prepare"
+    "postinstall": "nuxt prepare",
+    "test": "vitest",
+    "test:ui": "vitest --ui"
   },
   "dependencies": {
     "@lordicon/element": "^1.6.0",
@@ -22,11 +24,16 @@
     "vuedraggable": "^4.1.0"
   },
   "devDependencies": {
+    "@nuxt/test-utils": "^3.12.0",
     "@nuxtjs/supabase": "^1.1.6",
+    "@vue/test-utils": "^2.4.5",
     "autoprefixer": "^10.4.17",
+    "happy-dom": "^13.10.1",
+    "playwright-core": "^1.43.0",
     "postcss": "^8.4.35",
     "sass": "^1.70.0",
     "sass-loader": "^10.5.2",
-    "tailwindcss": "^3.4.1"
+    "tailwindcss": "^3.4.1",
+    "vitest": "^1.4.0"
   }
 }

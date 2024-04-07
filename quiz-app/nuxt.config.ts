@@ -1,7 +1,7 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
   devtools: { enabled: true },
-  modules: ["@nuxtjs/supabase", "@pinia/nuxt"],
+  modules: ["@nuxtjs/supabase", "@pinia/nuxt", "@nuxt/test-utils/module"],
   runtimeConfig: {
     public: {
       SUPABASE_URL: process.env.SUPABASE_URL,
