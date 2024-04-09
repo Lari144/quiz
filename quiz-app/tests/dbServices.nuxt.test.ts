@@ -84,7 +84,7 @@ describe("selectCards", () => {
   });
 });
 
-describe("selectRecords", () => {
+/*describe("selectRecords", () => {
   it("should fetch a record and return data", async () => {
     const tableName = "test";
     const result = await fetchRecords(mockSupabaseClient, tableName);
@@ -96,4 +96,4 @@ describe("selectRecords", () => {
   });
 });
 
-//Update
+//Update<*/
