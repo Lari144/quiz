@@ -2,7 +2,6 @@ import { describe, it, expect, vi } from "vitest";
 import {
   deleteQuestion,
   deleteAnswer,
-  deleteCards,
   deleteRecord,
 } from "../components/dbServices";
 
@@ -30,6 +29,21 @@ describe("deleteQuestion", () => {
     expect(mockEq).toHaveBeenCalledWith("card_id", data);
     expect(result).toEqual(null);
   });
+
+  it("should throw an error if the deletion fails", async () => {
+    const tableName = "test";
+    const data = 2;
+    const errorMessage = "Deletion failed";
+    mockEq.mockRejectedValueOnce(new Error(errorMessage));
+
+    await expect(
+      deleteQuestion(mockSupabaseClient, tableName, data)
+    ).rejects.toThrow(errorMessage);
+
+    expect(mockFrom).toHaveBeenCalledWith(tableName);
+    expect(mockDelete).toHaveBeenCalled();
+    expect(mockEq).toHaveBeenCalledWith("card_id", data);
+  });
 });
 
 describe("deleteAnswer", () => {
@@ -43,9 +57,22 @@ describe("deleteAnswer", () => {
     expect(mockEq).toHaveBeenCalledWith("question_id", data);
     expect(result).toEqual(null);
   });
-});
 
-//deleteCards
+  it("should throw an error if the deletion fails", async () => {
+    const tableName = "test";
+    const data = 2;
+    const errorMessage = "Deletion failed";
+    mockEq.mockRejectedValueOnce(new Error(errorMessage));
+
+    await expect(
+      deleteAnswer(mockSupabaseClient, tableName, data)
+    ).rejects.toThrow(errorMessage);
+
+    expect(mockFrom).toHaveBeenCalledWith(tableName);
+    expect(mockDelete).toHaveBeenCalled();
+    expect(mockEq).toHaveBeenCalledWith("question_id", data);
+  });
+});
 
 describe("deleteRecord", () => {
   it("should delete a record based on the ID", async () => {
@@ -57,5 +84,20 @@ describe("deleteRecord", () => {
     expect(mockDelete).toHaveBeenCalled();
     expect(mockEq).toHaveBeenCalledWith("id", data);
     expect(result).toEqual(null);
+  });
+
+  it("should throw an error if the deletion fails", async () => {
+    const tableName = "test";
+    const data = 2;
+    const errorMessage = "Deletion failed";
+    mockEq.mockRejectedValueOnce(new Error(errorMessage));
+
+    await expect(
+      deleteRecord(mockSupabaseClient, tableName, data)
+    ).rejects.toThrow(errorMessage);
+
+    expect(mockFrom).toHaveBeenCalledWith(tableName);
+    expect(mockDelete).toHaveBeenCalled();
+    expect(mockEq).toHaveBeenCalledWith("id", data);
   });
 });

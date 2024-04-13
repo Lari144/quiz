@@ -1,9 +1,5 @@
 import { describe, it, expect, vi } from "vitest";
-import {
-  addRecord,
-  addRecordAndSelectId,
-  addFile,
-} from "../components/dbServices";
+import { addRecord, addFile } from "../components/dbServices";
 
 const mockFrom = vi.fn().mockReturnThis();
 const mockInsert = vi.fn().mockResolvedValue({ data: { id: 1 }, error: null });
@@ -43,9 +39,21 @@ describe("addRecord", () => {
     expect(mockInsert).toHaveBeenCalledWith([data]);
     expect(result).toEqual({ id: 1 });
   });
-});
 
-//AddRecordAndSelectID
+  it("should throw an error if the record insertion fails", async () => {
+    const tableName = "test";
+    const data = { name: "something" };
+    const errorMessage = "Insertion failed";
+    mockInsert.mockRejectedValueOnce(new Error(errorMessage));
+
+    await expect(
+      addRecord(mockSupabaseClient, tableName, data)
+    ).rejects.toThrow(errorMessage);
+
+    expect(mockFrom).toHaveBeenCalledWith(tableName);
+    expect(mockInsert).toHaveBeenCalledWith([data]);
+  });
+});
 
 describe("addFile", () => {
   it("should upload a file and return data", async () => {
@@ -58,5 +66,19 @@ describe("addFile", () => {
       upsert: true,
     });
     expect(data).toEqual({ Key: "12314" });
+  });
+
+  it("should throw an error if the record insertion fails", async () => {
+    const tableName = "test";
+    const data = { name: "something" };
+    const errorMessage = "Insertion failed";
+    mockInsert.mockRejectedValueOnce(new Error(errorMessage));
+
+    await expect(
+      addRecord(mockSupabaseClient, tableName, data)
+    ).rejects.toThrow(errorMessage);
+
+    expect(mockFrom).toHaveBeenCalledWith(tableName);
+    expect(mockInsert).toHaveBeenCalledWith([data]);
   });
 });

@@ -104,9 +104,7 @@ describe("selectRecords", () => {
   it("should throw an error if fetching records fails", async () => {
     const tableName = "test";
     const errorMessage = "Error fetching records";
-    mockSelect.mockReturnValueOnce({
-      eq: vi.fn().mockRejectedValueOnce(new Error(errorMessage)),
-    });
+    mockSelect.mockResolvedValueOnce({ error: errorMessage, data: null });
 
     await expect(fetchRecords(mockSupabaseClient, tableName)).rejects.toThrow(
       errorMessage
@@ -127,6 +125,20 @@ describe("selectRecordsTest", () => {
     expect(mockEqSelect).toHaveBeenCalledWith("is_correct", false);
     expect(result).toEqual([{ id: 1, text: "abc123" }]);
   });
+
+  it("should throw an error if test fetching fails", async () => {
+    const tableName = "test";
+    const errorMessage = "Error during fetch";
+    mockEqSelect.mockRejectedValueOnce(new Error(errorMessage));
+
+    await expect(
+      fetchRecordsTest(mockSupabaseClient, tableName)
+    ).rejects.toThrow(errorMessage);
+
+    expect(mockFrom).toHaveBeenCalledWith(tableName);
+    expect(mockSelect).toHaveBeenCalled();
+    expect(mockEqSelect).toHaveBeenCalledWith("is_correct", false);
+  });
 });
 
 describe("selectCorrectAnswers", () => {
@@ -139,6 +151,20 @@ describe("selectCorrectAnswers", () => {
     expect(mockEqSelect).toHaveBeenCalledWith("is_correct", true);
     expect(result).toEqual([{ id: 1, text: "abc123" }]);
   });
+
+  it("should throw an error if fetching answers fails", async () => {
+    const tableName = "test";
+    const errorMessage = "Failed to fetch answers";
+    mockEqSelect.mockRejectedValueOnce(new Error(errorMessage));
+
+    await expect(
+      fetchCorrectAnswers(mockSupabaseClient, tableName)
+    ).rejects.toThrow(errorMessage);
+
+    expect(mockFrom).toHaveBeenCalledWith(tableName);
+    expect(mockSelect).toHaveBeenCalled();
+    expect(mockEqSelect).toHaveBeenCalledWith("is_correct", true);
+  });
 });
 
 describe("selectQuestions", () => {
@@ -150,6 +176,19 @@ describe("selectQuestions", () => {
     expect(mockEqSelect).toHaveBeenCalledWith("card_id", data);
     expect(result).toEqual([{ id: 1, text: "abc123" }]);
   });
+
+  it("should throw an error if fetching questions fails", async () => {
+    const card_id = "1";
+    const errorMessage = "Failed to fetch questions";
+    mockEqSelect.mockRejectedValueOnce(new Error(errorMessage));
+
+    await expect(
+      fetchRecordsQuestions(mockSupabaseClient, card_id)
+    ).rejects.toThrow(errorMessage);
+
+    expect(mockSelect).toHaveBeenCalled();
+    expect(mockEqSelect).toHaveBeenCalledWith("card_id", card_id);
+  });
 });
 
 describe("selectRecordsCategorie", () => {
@@ -160,6 +199,19 @@ describe("selectRecordsCategorie", () => {
     expect(mockFrom).toHaveBeenCalledWith(tableName);
     expect(mockSelect).toHaveBeenCalledWith("name, description");
     expect(result).toEqual([{ name: "hello", description: "abc123" }]);
+  });
+
+  it("should throw an error if fetching categories fails", async () => {
+    const tableName = "test";
+    const errorMessage = "Failed to fetch categories";
+    mockSelect.mockResolvedValueOnce({ data: null, error: errorMessage });
+
+    await expect(
+      fetchRecordsCategorie(mockSupabaseClient, tableName)
+    ).rejects.toThrow(errorMessage);
+
+    expect(mockFrom).toHaveBeenCalledWith(tableName);
+    expect(mockSelect).toHaveBeenCalledWith("name, description");
   });
 });
 
@@ -173,6 +225,20 @@ describe("fetchPublicUrl", () => {
     expect(mockGetPublicUrl).toHaveBeenCalledWith(`${userUid}/${file.name}`);
     expect(result).toBe("path/to/file");
   });
+
+  it("should throw an error if fetching public URL fails", async () => {
+    const userUid = "user123";
+    const file = { name: "photo.jpg" };
+    const errorMessage = "Failed to fetch URL";
+    mockGetPublicUrl.mockRejectedValueOnce(new Error(errorMessage));
+
+    await expect(
+      fetchPublicUrl(mockSupabaseClient, userUid, file)
+    ).rejects.toThrow(errorMessage);
+
+    expect(mockStorageFrom).toHaveBeenCalledWith("pictures");
+    expect(mockGetPublicUrl).toHaveBeenCalledWith(`${userUid}/${file.name}`);
+  });
 });
 
 describe("fetchFile", () => {
@@ -183,5 +249,18 @@ describe("fetchFile", () => {
     expect(mockStorageFrom).toHaveBeenCalledWith("pictures");
     expect(mockList).toHaveBeenCalledWith(`${userUid}`);
     expect(result).toEqual([{ name: "image.jpg", size: 1024 }]);
+  });
+
+  it("should throw an error if listing files fails", async () => {
+    const userUid = "user123";
+    const errorMessage = "Failed to list files";
+    mockList.mockRejectedValueOnce(new Error(errorMessage));
+
+    await expect(fetchFile(mockSupabaseClient, userUid)).rejects.toThrow(
+      errorMessage
+    );
+
+    expect(mockStorageFrom).toHaveBeenCalledWith("pictures");
+    expect(mockList).toHaveBeenCalledWith(userUid);
   });
 });

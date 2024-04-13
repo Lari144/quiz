@@ -44,7 +44,6 @@ export const fetchRecordsTest = async (supabaseClient, tableName) => {
     .from(tableName)
     .select()
     .eq("is_correct", false);
-  console.log(data);
   if (error) throw error;
   return data;
 };
@@ -54,7 +53,6 @@ export const fetchCorrectAnswers = async (supabaseClient, tableName) => {
     .from(tableName)
     .select()
     .eq("is_correct", true);
-  console.log(data);
   if (error) throw error;
   return data;
 };
