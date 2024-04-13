@@ -45,16 +45,27 @@
             <span class="text-gray-300 font-light text-sm">(with skips)</span>
           </button>
           <button
-            @click="showCheck"
+            @click="showCheckNoProgress"
             class="hover:bg-light-purple bg-input-bg font-semibold m-2 mt-4 btn flex flex-col items-center justify-center"
           >
-            <span class="text-white">New Test</span>
+            <span class="text-white">New Check</span>
             <span class="font-light text-gray-300 text-sm">(no progress)</span>
+          </button>
+          <button
+            @click="showMultipleChoiceNoProgress"
+            class="hover:bg-light-purple bg-input-bg font-semibold m-2 mt-4 btn flex flex-col items-center justify-center"
+          >
+            <span class="text-white">New Multiple Choice</span>
+            <span class="text-gray-300 font-light text-sm">(no progress)</span>
           </button>
         </div>
       </div>
       <Check v-else-if="currentView === 'Check'" />
+      <CheckNoProgress v-else-if="currentView === 'CheckNoProgress'" />
       <MultipleChoice v-else-if="currentView === 'MultipleChoice'" />
+      <MultipleChoiceNoProgress
+        v-else-if="currentView === 'MultipleChoiceNoProgress'"
+      />
     </div>
   </div>
 </template>
@@ -66,8 +77,16 @@ const showCheck = () => {
   currentView.value = "Check";
 };
 
+const showCheckNoProgress = () => {
+  currentView.value = "CheckNoProgress";
+};
+
 const showMultipleChoice = () => {
   currentView.value = "MultipleChoice";
+};
+
+const showMultipleChoiceNoProgress = () => {
+  currentView.value = "MultipleChoiceNoProgress";
 };
 
 const routeTo = () => {

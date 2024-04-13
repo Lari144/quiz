@@ -92,6 +92,14 @@ export const set_incorrect = async (supabaseClient, id) => {
   return data;
 };
 
+export const set_all_incorrect = async (supabaseClient) => {
+  const { error, data } = await supabaseClient
+    .from("answers")
+    .update({ is_correct: false });
+  if (error) throw error;
+  return data;
+};
+
 export const deleteRecord = async (supabaseClient, tableName, id) => {
   const { error, data } = await supabaseClient
     .from(tableName)
