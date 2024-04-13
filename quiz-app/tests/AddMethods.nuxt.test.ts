@@ -5,15 +5,32 @@ import {
   addFile,
 } from "../components/dbServices";
 
-const mockInsert = vi.fn().mockResolvedValue({ data: { id: 1 }, error: null });
 const mockFrom = vi.fn().mockReturnThis();
-const mockSelect = vi.fn().mockResolvedValue({ data: { id: 1 }, error: null });
+const mockInsert = vi.fn().mockResolvedValue({ data: { id: 1 }, error: null });
+const mockSelect = vi
+  .fn()
+  .mockResolvedValue({ data: [{ id: 1 }], error: null });
+const mockUpload = vi.fn().mockResolvedValue({
+  data: { Key: "12314" },
+  error: null,
+});
+const mockStorageFrom = vi.fn().mockReturnValue({
+  upload: mockUpload,
+});
 
 const mockSupabaseClient = {
   from: mockFrom.mockReturnValue({
     insert: mockInsert,
     select: mockSelect,
   }),
+};
+
+const mockStorage = {
+  from: mockStorageFrom,
+};
+
+const mockSupabaseClientStorage = {
+  storage: mockStorage,
 };
 
 describe("addRecord", () => {
@@ -28,24 +45,18 @@ describe("addRecord", () => {
   });
 });
 
-describe("addRecordAndSelectID", () => {
-  it("should add a record and return ID", async () => {
-    const tableName = "test_table";
-    const newText = "Test text";
-    const cardId = 42;
+//AddRecordAndSelectID
 
-    const resultId = await addRecordAndSelectId(
-      mockSupabaseClient,
-      tableName,
-      newText,
-      cardId
-    );
+describe("addFile", () => {
+  it("should upload a file and return data", async () => {
+    const userUid = "user123";
+    const file = new File(["content"], "test.png", { type: "image/png" });
+    const data = await addFile(mockSupabaseClientStorage, userUid, file);
 
-    expect(mockSupabaseClient.from).toHaveBeenCalledWith(tableName);
-    expect(mockInsert).toHaveBeenCalledWith([
-      { text: newText, card_id: cardId },
-    ]);
-    expect(mockSelect).toHaveBeenCalledWith("id");
-    expect(resultId).toEqual(1);
+    expect(mockStorageFrom).toHaveBeenCalledWith("pictures");
+    expect(mockUpload).toHaveBeenCalledWith(`${userUid}/${file.name}`, file, {
+      upsert: true,
+    });
+    expect(data).toEqual({ Key: "12314" });
   });
 });

@@ -45,13 +45,17 @@ describe("deleteAnswer", () => {
   });
 });
 
-describe("deleteCards", () => {
-  it("should delete card based on the ID", async () => {
-    const data = 1;
-    const result = await deleteCards(mockSupabaseClient, data);
+//deleteCards
 
+describe("deleteRecord", () => {
+  it("should delete a record based on the ID", async () => {
+    const tableName = "test";
+    const data = 2;
+    const result = await deleteRecord(mockSupabaseClient, tableName, data);
+
+    expect(mockFrom).toHaveBeenCalledWith(tableName);
     expect(mockDelete).toHaveBeenCalled();
-    expect(mockEq).toHaveBeenCalledWith("card_id", data);
+    expect(mockEq).toHaveBeenCalledWith("id", data);
     expect(result).toEqual(null);
   });
 });
