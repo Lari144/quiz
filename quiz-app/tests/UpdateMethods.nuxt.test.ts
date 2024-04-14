@@ -4,6 +4,7 @@ import {
   updateAnswer,
   updateQuestionAndAnswer,
   updateQuestionWithPicture,
+  set_incorrect,
 } from "../components/dbServices";
 
 const mockEq = vi.fn().mockResolvedValue({
@@ -75,7 +76,7 @@ describe("updateAnswer", () => {
     const tableName = "answers";
     const id = 1;
     const errorMessage = "Update failed";
-    mockEq.mockRejectedValueOnce(new Error(errorMessage)); // Setup to throw an error
+    mockEq.mockRejectedValueOnce(new Error(errorMessage));
 
     await expect(
       updateAnswer(mockSupabaseClient, tableName, id)
@@ -113,7 +114,7 @@ describe("updateQuestionAndAnswer", () => {
     const id = 2;
     const newText = "What is the answer?";
     const errorMessage = "Update failed";
-    mockEq.mockRejectedValueOnce(new Error(errorMessage)); // Setup to throw an error
+    mockEq.mockRejectedValueOnce(new Error(errorMessage));
 
     await expect(
       updateQuestionAndAnswer(mockSupabaseClient, tableName, id, newText)
@@ -151,7 +152,7 @@ describe("updateQuestionWithPicture", () => {
     const id = 3;
     const url = "path/to/picture";
     const errorMessage = "Update failed";
-    mockEq.mockRejectedValueOnce(new Error(errorMessage)); // Setup to throw an error
+    mockEq.mockRejectedValueOnce(new Error(errorMessage));
 
     await expect(
       updateQuestionWithPicture(mockSupabaseClient, tableName, id, url)
@@ -159,6 +160,35 @@ describe("updateQuestionWithPicture", () => {
 
     expect(mockFrom).toHaveBeenCalledWith(tableName);
     expect(mockUpdate).toHaveBeenCalledWith({ picture_url: url });
+    expect(mockEq).toHaveBeenCalledWith("id", id);
+  });
+});
+
+describe("setIncorrect", () => {
+  it("should set a records is_correct to false", async () => {
+    const id = 1;
+    const updateData = [{ id: 1, is_correct: false }];
+    mockEq.mockResolvedValue({ data: updateData, error: null });
+
+    const result = await set_incorrect(mockSupabaseClient, id);
+
+    expect(mockFrom).toHaveBeenCalledWith("answers");
+    expect(mockUpdate).toHaveBeenCalledWith({ is_correct: false });
+    expect(mockEq).toHaveBeenCalledWith("id", id);
+    expect(result).toEqual(updateData);
+  });
+
+  it("should throw an error if the update fails", async () => {
+    const id = 1;
+    const errorMessage = "Failed to update";
+    mockEq.mockRejectedValueOnce(new Error(errorMessage));
+
+    await expect(set_incorrect(mockSupabaseClient, id)).rejects.toThrow(
+      errorMessage
+    );
+
+    expect(mockFrom).toHaveBeenCalledWith("answers");
+    expect(mockUpdate).toHaveBeenCalledWith({ is_correct: false });
     expect(mockEq).toHaveBeenCalledWith("id", id);
   });
 });
