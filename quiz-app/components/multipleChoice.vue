@@ -4,7 +4,7 @@
     class="flex flex-col items-center justify-center py-24"
   >
     <div class="flex flex-col items-center">
-      <div v-if="currentQuestion.picture_url" class="flex justify-center mb-4">
+      <div v-if="currentQuestion?.picture_url" class="flex justify-center mb-4">
         <img
           class="object-contain"
           style="max-height: 40%; max-width: 40%"
@@ -13,8 +13,7 @@
         />
       </div>
       <div class="flex flex-col items-center justify-center py-10 text-center">
-        <div>{{ currentQuestion.public_url }}</div>
-        <div class="text-4xl text-slate-200">{{ currentQuestion.text }}</div>
+        <div class="text-4xl text-slate-200">{{ currentQuestion?.text }}</div>
       </div>
       <div class="flex justify-center w-full px-4">
         <button
@@ -47,17 +46,19 @@ import {
   set_incorrect,
 } from "~/components/dbServices";
 import { useBoxStore } from "../store/box";
+import type { Question } from "../types/question";
+import type { Answer } from "../types/answer";
 
 const supabase = useSupabaseClient();
 const boxStore = useBoxStore();
 const cardId = boxStore.cardId;
-const questions = ref([]);
-const answers = ref([]);
+const questions = ref<Question[]>([]);
+const answers = ref<Answer[]>([]);
 const currentIndex = ref(0);
-const currentQuestion = ref({});
-const currentAnswer = ref({});
-let randomAnswers = ref([]);
-const allQuestions = ref([]);
+const currentQuestion = ref<Question | null>(null);
+const currentAnswer = ref<Answer | null>(null);
+let randomAnswers = ref<Answer[]>([]);
+const allQuestions = ref<Question[]>([]);
 
 const props = defineProps({
   withSkips: Boolean,
@@ -102,7 +103,7 @@ const randomAnswersAndCurrectAnswer = async () => {
   );
 
   const filteredWithoutCurrent = filteredAnswers.filter(
-    (answer) => answer.id !== currentAnswer.value.id
+    (answer) => answer.id !== currentAnswer.value?.id
   );
 
   randomAnswers.value = filteredWithoutCurrent.slice(0, 3);
@@ -140,9 +141,9 @@ const nextQuestion = () => {
 };
 
 const selectAnswer = async (choice) => {
-  if (choice.text === currentAnswer.value.text) {
+  if (choice.text === currentAnswer.value?.text) {
     useNuxtApp().$toast.success("Correct");
-    await updateAnswer(supabase, "answers", currentAnswer.value.id, true);
+    await updateAnswer(supabase, "answers", currentAnswer.value.id);
     nextQuestion();
   } else {
     useNuxtApp().$toast.error("Incorrect");

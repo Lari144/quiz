@@ -1,5 +1,6 @@
 import { describe, it, expect, vi } from "vitest";
 import { addRecord, addFile } from "../components/dbServices";
+import { SupabaseClient } from "@supabase/supabase-js";
 
 const mockFrom = vi.fn().mockReturnThis();
 const mockInsert = vi.fn().mockResolvedValue({ data: { id: 1 }, error: null });

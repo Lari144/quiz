@@ -4,17 +4,16 @@
     class="flex flex-col items-center justify-center py-24"
   >
     <div class="flex flex-col items-center">
-      <div v-if="currentQuestion.picture_url" class="flex justify-center mb-4">
+      <div v-if="currentQuestion?.picture_url" class="flex justify-center mb-4">
         <img
           class="object-contain"
           style="max-height: 40%; max-width: 40%"
-          :src="currentQuestion.picture_url"
+          :src="currentQuestion?.picture_url"
           alt="Uploaded Image"
         />
       </div>
       <div class="flex flex-col items-center justify-center py-10 text-center">
-        <div>{{ currentQuestion.public_url }}</div>
-        <div class="text-4xl text-slate-200">{{ currentQuestion.text }}</div>
+        <div class="text-4xl text-slate-200">{{ currentQuestion?.text }}</div>
       </div>
       <div class="flex justify-center w-full px-4">
         <textarea
@@ -48,16 +47,17 @@ import {
   set_incorrect,
   fetchRecords,
 } from "~/components/dbServices";
-import { useNuxtApp, navigateTo } from "#imports";
 import { useBoxStore } from "../store/box";
+import type { Question } from "../types/question";
+import type { Answer } from "../types/answer";
 
-const questions = ref([]);
-const answers = ref([]);
+const questions = ref<Question[]>([]);
+const answers = ref<Answer[]>([]);
 const supabase = useSupabaseClient();
 const currentIndex = ref(0);
-const currentQuestion = ref({});
-const currentAnswer = ref({});
-const answer = ref("");
+const currentQuestion = ref<Question | null>(null);
+const currentAnswer = ref<Answer | null>(null);
+const answer = ref<string>("");
 const boxStore = useBoxStore();
 const cardId = boxStore.cardId;
 
@@ -98,7 +98,7 @@ onMounted(() => {
   fetchData();
 });
 
-const shuffleArray = (array) => {
+const shuffleArray = (array: any) => {
   for (let i = array.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1));
     [array[i], array[j]] = [array[j], array[i]];
@@ -109,7 +109,7 @@ const updateCurrentQA = () => {
   let question = questions.value[currentIndex.value];
   currentQuestion.value = { ...question, flipped: false };
   let answer = answers.value.find((a) => a.question_id === question.id);
-  currentAnswer.value = answer || {};
+  currentAnswer.value = answer || null;
 };
 
 const nextQuestion = () => {
@@ -124,9 +124,9 @@ const nextQuestion = () => {
 };
 
 const checkAnswer = async () => {
-  if (answer.value === currentAnswer.value.text) {
+  if (answer.value === currentAnswer.value?.text) {
     useNuxtApp().$toast.success("Correct");
-    await updateAnswer(supabase, "answers", currentAnswer.value.id, true); // Assuming updateAnswer can mark the answer as correct
+    await updateAnswer(supabase, "answers", currentAnswer.value.id);
     answer.value = "";
     nextQuestion();
   } else {

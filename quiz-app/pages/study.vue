@@ -21,11 +21,11 @@
       >
         <div
           class="card rounded-xl"
-          :class="{ flipped: currentQuestion.flipped }"
+          :class="{ flipped: currentQuestion?.flipped }"
           @click="flipCard"
         >
           <div class="front flex flex-col">
-            <div v-if="currentQuestion.picture_url">
+            <div v-if="currentQuestion?.picture_url">
               <img
                 class="w-full mb-4"
                 :src="currentQuestion.picture_url"
@@ -33,12 +33,11 @@
               />
             </div>
             <div>
-              {{ currentQuestion.public_url }}
-              {{ currentQuestion.text }}
+              {{ currentQuestion?.text }}
             </div>
           </div>
           <div class="back">
-            {{ currentAnswer.text }}
+            {{ currentAnswer?.text }}
           </div>
         </div>
         <div class="navigation text-white">
@@ -60,13 +59,15 @@
 <script setup lang="ts">
 import { fetchRecords, fetchRecordsQuestions } from "~/components/dbServices";
 import { useBoxStore } from "../store/box";
+import type { Question } from "../types/question";
+import type { Answer } from "../types/answer";
 
-const questions = ref([]);
-const answers = ref([]);
+const questions = ref<Question[]>([]);
+const answers = ref<Answer[]>([]);
 const supabase = useSupabaseClient();
 const currentIndex = ref(0);
-const currentQuestion = ref({});
-const currentAnswer = ref({});
+const currentQuestion = ref<Question | null>(null);
+const currentAnswer = ref<Answer | null>(null);
 const { cardId } = useBoxStore();
 
 const routeTo = () => {
@@ -74,7 +75,6 @@ const routeTo = () => {
 };
 
 const fetchData = async () => {
-  console.log(cardId);
   questions.value = await fetchRecordsQuestions(supabase, cardId);
   answers.value = await fetchRecords(supabase, "answers");
   if (questions.value.length > 0) {
@@ -84,8 +84,8 @@ const fetchData = async () => {
 
 onMounted(fetchData);
 
-const flipCard = (index) => {
-  currentQuestion.value.flipped = !currentQuestion.value.flipped;
+const flipCard = () => {
+  currentQuestion.value.flipped = !currentQuestion.value?.flipped;
 };
 
 const nextQuestion = () => {

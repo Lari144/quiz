@@ -1,4 +1,11 @@
-export const addRecord = async (supabaseClient, tableName, data) => {
+import type { Record } from "../types/record";
+import { SupabaseClient } from "@supabase/supabase-js";
+
+export const addRecord = async (
+  supabaseClient: SupabaseClient,
+  tableName: string,
+  data: any
+) => {
   const { error, data: insertedData } = await supabaseClient
     .from(tableName)
     .insert([data]);
@@ -6,7 +13,11 @@ export const addRecord = async (supabaseClient, tableName, data) => {
   return insertedData;
 };
 
-export const deleteQuestion = async (supabaseClient, tableName, id) => {
+export const deleteQuestion = async (
+  supabaseClient: SupabaseClient,
+  tableName: string,
+  id: number
+) => {
   const { error, data } = await supabaseClient
     .from(tableName)
     .delete()
@@ -15,7 +26,11 @@ export const deleteQuestion = async (supabaseClient, tableName, id) => {
   return data;
 };
 
-export const deleteAnswer = async (supabaseClient, tableName, id) => {
+export const deleteAnswer = async (
+  supabaseClient: SupabaseClient,
+  tableName: string,
+  id: number
+) => {
   const { error, data } = await supabaseClient
     .from(tableName)
     .delete()
@@ -24,7 +39,11 @@ export const deleteAnswer = async (supabaseClient, tableName, id) => {
   return data;
 };
 
-export const fetchRecordsCards = async (supabaseClient, tableName, user) => {
+export const fetchRecordsCards = async (
+  supabaseClient: SupabaseClient,
+  tableName: string,
+  user: string
+) => {
   const { error, data } = await supabaseClient
     .from(tableName)
     .select()
@@ -33,13 +52,19 @@ export const fetchRecordsCards = async (supabaseClient, tableName, user) => {
   return data;
 };
 
-export const fetchRecords = async (supabaseClient, tableName) => {
+export const fetchRecords = async (
+  supabaseClient: SupabaseClient,
+  tableName: string
+) => {
   const { error, data } = await supabaseClient.from(tableName).select();
   if (error) throw error;
   return data;
 };
 
-export const fetchRecordsTest = async (supabaseClient, tableName) => {
+export const fetchRecordsTest = async (
+  supabaseClient: SupabaseClient,
+  tableName: string
+) => {
   const { error, data } = await supabaseClient
     .from(tableName)
     .select()
@@ -48,7 +73,10 @@ export const fetchRecordsTest = async (supabaseClient, tableName) => {
   return data;
 };
 
-export const fetchCorrectAnswers = async (supabaseClient, tableName) => {
+export const fetchCorrectAnswers = async (
+  supabaseClient: SupabaseClient,
+  tableName: string
+) => {
   const { error, data } = await supabaseClient
     .from(tableName)
     .select()
@@ -57,7 +85,10 @@ export const fetchCorrectAnswers = async (supabaseClient, tableName) => {
   return data;
 };
 
-export const deleteCards = async (supabaseClient, cardId) => {
+export const deleteCards = async (
+  supabaseClient: SupabaseClient,
+  cardId: number
+) => {
   const questions = await fetchRecordsQuestions(supabaseClient, cardId);
   for (const question of questions) {
     await deleteAnswer(supabaseClient, "answers", question.id);
@@ -66,7 +97,10 @@ export const deleteCards = async (supabaseClient, cardId) => {
   await deleteRecord(supabaseClient, "cards", cardId);
 };
 
-export const fetchRecordsQuestions = async (supabaseClient, card_id) => {
+export const fetchRecordsQuestions = async (
+  supabaseClient: SupabaseClient,
+  card_id: number
+) => {
   const { error, data } = await supabaseClient
     .from("questions")
     .select()
@@ -75,7 +109,10 @@ export const fetchRecordsQuestions = async (supabaseClient, card_id) => {
   return data;
 };
 
-export const fetchRecordsCategorie = async (supabaseClient, tableName) => {
+export const fetchRecordsCategorie = async (
+  supabaseClient: SupabaseClient,
+  tableName: string
+) => {
   const { error, data } = await supabaseClient
     .from(tableName)
     .select("name, description");
@@ -83,7 +120,10 @@ export const fetchRecordsCategorie = async (supabaseClient, tableName) => {
   return data;
 };
 
-export const set_incorrect = async (supabaseClient, id) => {
+export const set_incorrect = async (
+  supabaseClient: SupabaseClient,
+  id: number
+) => {
   const { error, data } = await supabaseClient
     .from("answers")
     .update({ is_correct: false })
@@ -92,7 +132,11 @@ export const set_incorrect = async (supabaseClient, id) => {
   return data;
 };
 
-export const deleteRecord = async (supabaseClient, tableName, id) => {
+export const deleteRecord = async (
+  supabaseClient: SupabaseClient,
+  tableName: string,
+  id: number
+) => {
   const { error, data } = await supabaseClient
     .from(tableName)
     .delete()
@@ -101,7 +145,12 @@ export const deleteRecord = async (supabaseClient, tableName, id) => {
   return data;
 };
 
-export const updateRecord = async (supabaseClient, tableName, id, newTitle) => {
+export const updateRecord = async (
+  supabaseClient: SupabaseClient,
+  tableName: string,
+  id: number,
+  newTitle: string
+) => {
   const { error, data } = await supabaseClient
     .from(tableName)
     .update({ title: newTitle })
@@ -110,7 +159,11 @@ export const updateRecord = async (supabaseClient, tableName, id, newTitle) => {
   return data;
 };
 
-export const updateAnswer = async (supabaseClient, tableName, id) => {
+export const updateAnswer = async (
+  supabaseClient: SupabaseClient,
+  tableName: string,
+  id: number
+) => {
   const { error, data } = await supabaseClient
     .from(tableName)
     .update({ is_correct: true })
@@ -120,10 +173,10 @@ export const updateAnswer = async (supabaseClient, tableName, id) => {
 };
 
 export const updateQuestionAndAnswer = async (
-  supabaseClient,
-  tableName,
-  id,
-  newText
+  supabaseClient: SupabaseClient,
+  tableName: string,
+  id: number,
+  newText: string
 ) => {
   const { error, data } = await supabaseClient
     .from(tableName)
@@ -134,10 +187,10 @@ export const updateQuestionAndAnswer = async (
 };
 
 export const updateQuestionWithPicture = async (
-  supabaseClient,
-  tableName,
-  id,
-  url
+  supabaseClient: SupabaseClient,
+  tableName: string,
+  id: number,
+  url: string
 ) => {
   const { error, data } = await supabaseClient
     .from(tableName)
@@ -147,7 +200,11 @@ export const updateQuestionWithPicture = async (
   return data;
 };
 
-export const fetchPublicUrl = async (supabaseClient, userUid, file) => {
+export const fetchPublicUrl = async (
+  supabaseClient: SupabaseClient,
+  userUid: number,
+  file: File
+) => {
   const { data, error } = await supabaseClient.storage
     .from("pictures")
     .getPublicUrl(`${userUid}/${file.name}`);
@@ -157,10 +214,10 @@ export const fetchPublicUrl = async (supabaseClient, userUid, file) => {
 };
 
 export const addRecordAndSelectId = async (
-  supabaseClient,
-  tableName,
-  new_text,
-  card_id
+  supabaseClient: SupabaseClient,
+  tableName: string,
+  new_text: string,
+  card_id: number
 ) => {
   const { error, data } = await supabaseClient
     .from(tableName)
@@ -170,7 +227,11 @@ export const addRecordAndSelectId = async (
   return data[0].id;
 };
 
-export const addFile = async (supabaseClient, user_uid, file) => {
+export const addFile = async (
+  supabaseClient: SupabaseClient,
+  user_uid: number,
+  file: File
+) => {
   const { data, error } = await supabaseClient.storage
     .from("pictures")
     .upload(`${user_uid}/${file.name}`, file, {
@@ -180,7 +241,10 @@ export const addFile = async (supabaseClient, user_uid, file) => {
   return data;
 };
 
-export const fetchFile = async (supabaseClient, user_uid) => {
+export const fetchFile = async (
+  supabaseClient: SupabaseClient,
+  user_uid: number
+) => {
   const { data, error } = await supabaseClient.storage
     .from("pictures")
     .list(`${user_uid}`);

@@ -107,19 +107,22 @@ import {
   fetchPublicUrl,
 } from "~/components/dbServices";
 import { useBoxStore } from "../store/box";
+import type { Question } from "../types/question";
+import type { Answer } from "../types/answer";
+import type { QA } from "../types/qa";
 
 const { cardId } = useBoxStore();
 
-const questions = ref([]);
+const questions = ref<Question[]>([]);
 const supabase = useSupabaseClient();
-const answers = ref([]);
+const answers = ref<Answer[]>([]);
 const showModal = ref(false);
 const newQuestion = ref("");
 const newAnswer = ref("");
 const user = useSupabaseUser();
 let fileInput = ref(null);
 
-const toggleInput = (item) => {
+const toggleInput = (item: any) => {
   item.showInput = !item.showInput;
 };
 
@@ -127,7 +130,7 @@ const routeTo = () => {
   navigateTo("/");
 };
 
-const filteredAnswers = (questionId) => {
+const filteredAnswers = (questionId: number) => {
   return answers.value.filter((answer) => answer.question_id === questionId);
 };
 
@@ -142,7 +145,7 @@ const refreshData = async () => {
 
 onMounted(refreshData);
 
-const deletePicture = async (question_id) => {
+const deletePicture = async (question_id: number) => {
   try {
     await updateQuestionWithPicture(supabase, "questions", question_id, "");
     await refreshData();
@@ -151,11 +154,11 @@ const deletePicture = async (question_id) => {
   }
 };
 
-const addPicture = async (event, question_id) => {
+const addPicture = async (event: any, question_id: number) => {
   if (event.target.files.length > 0) {
     fileInput = event.target.files[0];
     try {
-      await addFile(supabase, user.value?.id, fileInput);
+      await addFile(supabase, user.value.id, fileInput);
       const url = await fetchPublicUrl(supabase, user.value?.id, fileInput);
       await updateQuestionWithPicture(
         supabase,
@@ -170,7 +173,7 @@ const addPicture = async (event, question_id) => {
   }
 };
 
-const addQuestions = async ({ question, answer }) => {
+const addQuestions = async ({ question, answer }: QA) => {
   try {
     const id = await addRecordAndSelectId(
       supabase,
@@ -185,7 +188,7 @@ const addQuestions = async ({ question, answer }) => {
   }
 };
 
-const addAnwers = async (answer, id) => {
+const addAnwers = async (answer: string, id: number) => {
   const anwer_data = { text: answer, question_id: id, is_correct: false };
   try {
     await addRecord(supabase, "answers", anwer_data);
@@ -194,7 +197,7 @@ const addAnwers = async (answer, id) => {
   }
 };
 
-const updateQuestion = async (question, id) => {
+const updateQuestion = async (question: Question, id: number) => {
   try {
     await updateQuestionAndAnswer(supabase, "questions", id, newQuestion.value);
     await refreshData();
@@ -204,9 +207,8 @@ const updateQuestion = async (question, id) => {
   }
 };
 
-const updateAnswer = async (answer, id) => {
+const updateAnswer = async (answer: Answer, id: number) => {
   try {
-    console.log(id, answer);
     await updateQuestionAndAnswer(supabase, "answers", id, newAnswer.value);
     await refreshData();
     toggleInput(answer);
@@ -215,7 +217,7 @@ const updateAnswer = async (answer, id) => {
   }
 };
 
-const deleteQA = async (question_id) => {
+const deleteQA = async (question_id: number) => {
   try {
     const relatedAnswers = answers.value.filter(
       (answer) => answer.question_id === question_id

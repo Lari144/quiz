@@ -10,8 +10,7 @@
     </div>
     <div class="flex gap-4 items-center">
       <select
-        v-model="searchType"
-        @change="$emit('search-type-change', searchType)"
+        @change="$emit('search-type-change')"
         class="bg-input-bg text-white placeholder-gray-300 focus:outline-none rounded-full p-2"
       >
         <option value="title">Title</option>
@@ -40,6 +39,7 @@
 </template>
 
 <script setup lang="ts">
+import type { Category } from "~/types/category";
 import { addRecord } from "./dbServices";
 
 const emit = defineEmits(["input-value", "search-type-change"]);
@@ -47,7 +47,7 @@ const input = ref("");
 const showModal = ref(false);
 const supabase = useSupabaseClient();
 
-const addCategory = async ({ name, description }) => {
+const addCategory = async ({ name, description }: Category) => {
   const tableName = "categories";
   const data = { name: name, description: description };
   try {

@@ -107,15 +107,17 @@ import {
 } from "./dbServices";
 import { useBoxStore } from "../store/box";
 import Progress from "./progress.vue";
+import type { Category } from "../types/category";
+import type { Box } from "../types/box";
 
-const boxes = ref([]);
-const categories = ref([]);
+const boxes = ref<Box[]>([]);
+const categories = ref<Category[]>([]);
 const supabase = useSupabaseClient();
 const showModal = ref(false);
 const newCardTitle = ref("");
 const user = useSupabaseUser();
 const store = useBoxStore();
-let searchDebounceTimer: Number;
+let searchDebounceTimer: ReturnType<typeof setTimeout>;
 
 const props = defineProps({ searchQuery: String, searchType: String });
 
@@ -142,7 +144,7 @@ const refreshData = async () => {
 
 const fetchAllData = async () => {
   try {
-    boxes.value = await fetchRecordsCards(supabase, "cards", user.value?.id);
+    boxes.value = await fetchRecordsCards(supabase, "cards", user.value.id);
     categories.value = await fetchRecords(supabase, "categories");
   } catch (error) {
     console.error("Error fetching records:", error);
@@ -160,10 +162,14 @@ watch([() => props.searchQuery, props.searchType], () => {
   }, 500);
 });
 
-const addCard = async ({ name, category }) => {
+const addCard = async ({ title, category }: Box) => {
   const tableName = "cards";
   const category_ = categories.value.find((c) => c.name === category);
-  const data = { title: name, user: user.value?.id, category_id: category_.id };
+  const data = {
+    title: title,
+    user: user.value?.id,
+    category_id: category_?.id,
+  };
   try {
     await addRecord(supabase, tableName, data);
     await refreshData();
@@ -172,7 +178,7 @@ const addCard = async ({ name, category }) => {
   }
 };
 
-const deleteCard = async (index) => {
+const deleteCard = async (index: number) => {
   try {
     await deleteCards(supabase, index);
     await refreshData();
@@ -181,10 +187,9 @@ const deleteCard = async (index) => {
   }
 };
 
-const updateCard = async (box, index) => {
+const updateCard = async (box: Box, index: number) => {
   const tablename = "cards";
   try {
-    console.log(box, newCardTitle);
     await updateRecord(supabase, tablename, index, newCardTitle.value);
     toggleInput(box);
     await refreshData();
@@ -193,12 +198,12 @@ const updateCard = async (box, index) => {
   }
 };
 
-const routeTo = (cardId, path) => {
+const routeTo = (cardId: number, path: string) => {
   store.setCardId(cardId);
   navigateTo(path);
 };
 
-const toggleInput = (box) => {
+const toggleInput = (box: any) => {
   box.showInput = !box.showInput;
 };
 </script>
