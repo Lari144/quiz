@@ -1,4 +1,3 @@
-import type { Record } from "../types/record";
 import { SupabaseClient } from "@supabase/supabase-js";
 
 export const addRecord = async (
@@ -202,8 +201,8 @@ export const updateQuestionWithPicture = async (
 
 export const fetchPublicUrl = async (
   supabaseClient: SupabaseClient,
-  userUid: number,
-  file: File
+  userUid: string,
+  file: any
 ) => {
   const { data, error } = await supabaseClient.storage
     .from("pictures")
@@ -229,8 +228,8 @@ export const addRecordAndSelectId = async (
 
 export const addFile = async (
   supabaseClient: SupabaseClient,
-  user_uid: number,
-  file: File
+  user_uid: string,
+  file: any
 ) => {
   const { data, error } = await supabaseClient.storage
     .from("pictures")
@@ -243,7 +242,7 @@ export const addFile = async (
 
 export const fetchFile = async (
   supabaseClient: SupabaseClient,
-  user_uid: number
+  user_uid: string
 ) => {
   const { data, error } = await supabaseClient.storage
     .from("pictures")

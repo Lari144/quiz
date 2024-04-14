@@ -107,13 +107,13 @@ const randomAnswersAndCurrectAnswer = async () => {
   );
 
   randomAnswers.value = filteredWithoutCurrent.slice(0, 3);
-  randomAnswers.value.push(currentAnswer.value);
+  randomAnswers.value.push(currentAnswer.value!);
   shuffleArray(randomAnswers.value);
 };
 
 onMounted(fetchData);
 
-const shuffleArray = (array) => {
+const shuffleArray = (array: Array<Answer | Question>) => {
   for (let i = array.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1));
     [array[i], array[j]] = [array[j], array[i]];
@@ -125,7 +125,7 @@ const updateCurrentQA = () => {
     const question = questions.value[currentIndex.value];
     currentQuestion.value = { ...question };
     const answer = answers.value.find((a) => a.question_id === question.id);
-    currentAnswer.value = answer || {};
+    currentAnswer.value = answer! || {};
     randomAnswersAndCurrectAnswer();
   }
 };
@@ -140,7 +140,7 @@ const nextQuestion = () => {
   }
 };
 
-const selectAnswer = async (choice) => {
+const selectAnswer = async (choice: Answer) => {
   if (choice.text === currentAnswer.value?.text) {
     useNuxtApp().$toast.success("Correct");
     await updateAnswer(supabase, "answers", currentAnswer.value.id);

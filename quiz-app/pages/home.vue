@@ -150,7 +150,7 @@ const deletePicture = async (question_id: number) => {
     await updateQuestionWithPicture(supabase, "questions", question_id, "");
     await refreshData();
   } catch (error) {
-    console.error("Error uploading picture:", error.message);
+    console.error("Error uploading picture:", error);
   }
 };
 
@@ -158,8 +158,8 @@ const addPicture = async (event: any, question_id: number) => {
   if (event.target.files.length > 0) {
     fileInput = event.target.files[0];
     try {
-      await addFile(supabase, user.value.id, fileInput);
-      const url = await fetchPublicUrl(supabase, user.value?.id, fileInput);
+      await addFile(supabase, user.value!.id, fileInput);
+      const url = await fetchPublicUrl(supabase, user.value!.id, fileInput);
       await updateQuestionWithPicture(
         supabase,
         "questions",
@@ -168,7 +168,7 @@ const addPicture = async (event: any, question_id: number) => {
       );
       await refreshData();
     } catch (error) {
-      console.error("Error uploading picture:", error.message);
+      console.error("Error uploading picture:", error);
     }
   }
 };
@@ -184,7 +184,7 @@ const addQuestions = async ({ question, answer }: QA) => {
     await addAnwers(answer, id);
     await refreshData();
   } catch (error) {
-    console.error("Error adding record:", error.message);
+    console.error("Error adding record:", error);
   }
 };
 
@@ -193,7 +193,7 @@ const addAnwers = async (answer: string, id: number) => {
   try {
     await addRecord(supabase, "answers", anwer_data);
   } catch (error) {
-    console.error("Error adding record:", error.message);
+    console.error("Error adding record:", error);
   }
 };
 
@@ -203,7 +203,7 @@ const updateQuestion = async (question: Question, id: number) => {
     await refreshData();
     toggleInput(question);
   } catch (error) {
-    console.error("Error adding record:", error.message);
+    console.error("Error adding record:", error);
   }
 };
 
@@ -213,7 +213,7 @@ const updateAnswer = async (answer: Answer, id: number) => {
     await refreshData();
     toggleInput(answer);
   } catch (error) {
-    console.error("Error adding record:", error.message);
+    console.error("Error adding record:", error);
   }
 };
 
@@ -228,7 +228,7 @@ const deleteQA = async (question_id: number) => {
     await deleteRecord(supabase, "questions", question_id);
     await refreshData();
   } catch (error) {
-    console.error("Error deleting record:", error.message);
+    console.error("Error deleting record:", error);
   }
 };
 </script>

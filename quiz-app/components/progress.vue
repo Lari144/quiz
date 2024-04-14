@@ -17,7 +17,7 @@ const supabase = useSupabaseClient();
 const progress = ref(0);
 
 const updateProgress = async () => {
-  const questions = await fetchRecordsQuestions(supabase, props.card_id);
+  const questions = await fetchRecordsQuestions(supabase, props.card_id!);
   const allAnswers = await fetchRecords(supabase, "answers");
 
   const cardAnswers = allAnswers.filter((answer) =>

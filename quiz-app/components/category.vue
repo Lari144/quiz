@@ -10,7 +10,8 @@
     </div>
     <div class="flex gap-4 items-center">
       <select
-        @change="$emit('search-type-change')"
+        v-model="searchType"
+        @change="$emit('search-type-change', searchType)"
         class="bg-input-bg text-white placeholder-gray-300 focus:outline-none rounded-full p-2"
       >
         <option value="title">Title</option>
@@ -53,7 +54,7 @@ const addCategory = async ({ name, description }: Category) => {
   try {
     await addRecord(supabase, tableName, data);
   } catch (error) {
-    console.error("Error adding record:", error.message);
+    console.error("Error adding record:", error);
   }
 };
 </script>

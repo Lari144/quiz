@@ -85,7 +85,9 @@ const fetchData = async () => {
 onMounted(fetchData);
 
 const flipCard = () => {
-  currentQuestion.value.flipped = !currentQuestion.value?.flipped;
+  if (currentQuestion.value) {
+    currentQuestion.value.flipped = !currentQuestion.value.flipped;
+  }
 };
 
 const nextQuestion = () => {
@@ -109,7 +111,7 @@ const updateCurrentQA = () => {
   let answer = answers.value.find(
     (answer) => answer.question_id === question.id
   );
-  currentAnswer.value = answer || {};
+  currentAnswer.value = answer! || {};
 };
 </script>
 

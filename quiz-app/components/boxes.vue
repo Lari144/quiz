@@ -144,7 +144,9 @@ const refreshData = async () => {
 
 const fetchAllData = async () => {
   try {
-    boxes.value = await fetchRecordsCards(supabase, "cards", user.value.id);
+    if (user.value) {
+      boxes.value = await fetchRecordsCards(supabase, "cards", user.value.id);
+    }
     categories.value = await fetchRecords(supabase, "categories");
   } catch (error) {
     console.error("Error fetching records:", error);
@@ -174,7 +176,7 @@ const addCard = async ({ title, category }: Box) => {
     await addRecord(supabase, tableName, data);
     await refreshData();
   } catch (error) {
-    console.error("Error adding record:", error.message);
+    console.error("Error adding record:", error);
   }
 };
 
@@ -183,7 +185,7 @@ const deleteCard = async (index: number) => {
     await deleteCards(supabase, index);
     await refreshData();
   } catch (error) {
-    console.error("Error deleting card:", error.message);
+    console.error("Error deleting card:", error);
   }
 };
 
@@ -194,7 +196,9 @@ const updateCard = async (box: Box, index: number) => {
     toggleInput(box);
     await refreshData();
   } catch (error) {
-    console.error("Error deleting record:", error.message);
+    if (error instanceof Error) {
+      console.error("Error deleting record:", error);
+    }
   }
 };
 

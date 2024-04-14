@@ -3,4 +3,5 @@ export interface Question {
   text: string;
   picture_url?: string;
   flipped?: boolean;
+  showInput: any;
 }
