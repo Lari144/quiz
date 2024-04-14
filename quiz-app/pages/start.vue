@@ -25,7 +25,7 @@
             Check
           </button>
           <button
-            @click="showCheck"
+            @click="showCheckWithSkips"
             class="hover:bg-light-purple bg-input-bg font-semibold m-2 btn flex flex-col items-center justify-center"
           >
             <span class="text-white">Check</span>
@@ -38,7 +38,7 @@
             Multiple Choice
           </button>
           <button
-            @click="showMultipleChoice"
+            @click="showMultipleChoiceWithSkips"
             class="hover:bg-light-purple bg-input-bg font-semibold m-2 btn flex flex-col items-center justify-center"
           >
             <span class="text-white">Multiple Choice</span>
@@ -60,11 +60,35 @@
           </button>
         </div>
       </div>
-      <Check v-else-if="currentView === 'Check'" />
-      <CheckNoProgress v-else-if="currentView === 'CheckNoProgress'" />
-      <MultipleChoice v-else-if="currentView === 'MultipleChoice'" />
-      <MultipleChoiceNoProgress
+      <Check
+        v-if="currentView === 'Check'"
+        :withSkips="false"
+        :no-progress="false"
+      />
+      <Check
+        v-else-if="currentView === 'CheckWithSkips'"
+        :withSkips="true"
+        :no-progress="false"
+      />
+      <Check
+        v-else-if="currentView === 'CheckNoProgress'"
+        :withSkips="false"
+        :no-progress="true"
+      />
+      <MultipleChoice
+        v-if="currentView === 'MultipleChoice'"
+        :withSkips="false"
+        :no-progress="false"
+      />
+      <MultipleChoice
+        v-else-if="currentView === 'MultipleChoiceWithSkips'"
+        :withSkips="true"
+        :no-progress="false"
+      />
+      <MultipleChoice
         v-else-if="currentView === 'MultipleChoiceNoProgress'"
+        :withSkips="true"
+        :no-progress="true"
       />
     </div>
   </div>
@@ -77,12 +101,20 @@ const showCheck = () => {
   currentView.value = "Check";
 };
 
+const showCheckWithSkips = () => {
+  currentView.value = "CheckWithSkips";
+};
+
 const showCheckNoProgress = () => {
   currentView.value = "CheckNoProgress";
 };
 
 const showMultipleChoice = () => {
   currentView.value = "MultipleChoice";
+};
+
+const showMultipleChoiceWithSkips = () => {
+  currentView.value = "MultipleChoiceWithSkips";
 };
 
 const showMultipleChoiceNoProgress = () => {

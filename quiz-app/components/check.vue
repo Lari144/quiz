@@ -28,8 +28,9 @@
     <div class="text-white p-4">
       <button class="hover:text-gray-300" @click="checkAnswer()">check</button>
       <button
-        style="margin-left: 10px"
-        class="hover:text-gray-300"
+        v-if="withSkips"
+        style="margin-left: 50px"
+        class="hover:text-gray-300 text-zinc-700"
         @click="nextQuestion()"
       >
         Skip
@@ -44,6 +45,8 @@ import {
   fetchRecordsTest,
   fetchRecordsQuestions,
   updateAnswer,
+  set_incorrect,
+  fetchRecords,
 } from "~/components/dbServices";
 import { useNuxtApp, navigateTo } from "#imports";
 import { useBoxStore } from "../store/box";
@@ -58,9 +61,26 @@ const answer = ref("");
 const boxStore = useBoxStore();
 const cardId = boxStore.cardId;
 
+const props = defineProps({
+  withSkips: Boolean,
+  noProgress: Boolean,
+});
+
+const newAnswers = async () => {
+  const all_answers = await fetchRecords(supabase, "answers");
+  answers.value = all_answers;
+  for (const answer of all_answers) {
+    await set_incorrect(supabase, answer.id);
+  }
+};
+
 const fetchData = async () => {
   questions.value = await fetchRecordsQuestions(supabase, cardId);
-  answers.value = await fetchRecordsTest(supabase, "answers");
+  if (props.noProgress === true) {
+    await newAnswers();
+  } else {
+    answers.value = await fetchRecordsTest(supabase, "answers");
+  }
   filterQuestions();
 };
 
@@ -74,7 +94,9 @@ const filterQuestions = () => {
   }
 };
 
-onMounted(fetchData);
+onMounted(() => {
+  fetchData();
+});
 
 const shuffleArray = (array) => {
   for (let i = array.length - 1; i > 0; i--) {

@@ -44,6 +44,7 @@ import {
   fetchRecordsQuestions,
   updateAnswer,
   fetchRecords,
+  set_incorrect,
 } from "~/components/dbServices";
 import { useBoxStore } from "../store/box";
 
@@ -58,9 +59,26 @@ const currentAnswer = ref({});
 let randomAnswers = ref([]);
 const allQuestions = ref([]);
 
+const props = defineProps({
+  withSkips: Boolean,
+  noProgress: Boolean,
+});
+
+const newAnswers = async () => {
+  const all_answers = await fetchRecords(supabase, "answers");
+  answers.value = all_answers;
+  for (const answer of all_answers) {
+    await set_incorrect(supabase, answer.id);
+  }
+};
+
 const fetchData = async () => {
   questions.value = await fetchRecordsQuestions(supabase, cardId);
-  answers.value = await fetchRecordsTest(supabase, "answers");
+  if (props.noProgress === true) {
+    await newAnswers();
+  } else {
+    answers.value = await fetchRecordsTest(supabase, "answers");
+  }
   filterQuestions();
   randomAnswersAndCurrectAnswer();
 };
