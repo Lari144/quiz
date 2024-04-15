@@ -27,6 +27,7 @@
       </div>
     </div>
     <button
+      v-if="withSkips"
       style="margin-left: 10px"
       class="hover:text-gray-300"
       @click="nextQuestion()"

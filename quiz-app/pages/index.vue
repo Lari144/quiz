@@ -1,5 +1,8 @@
 <template>
-  <div class="font-base text-[#333] bg-dark min-h-screen flex flex-col">
+  <div
+    style="background-color: #121212 !important"
+    class="font-base text-[#333] bg-dark min-h-screen flex flex-col"
+  >
     <header class="w-full flex justify-between items-start px-4 pt-2">
       <div>
         <h1 class="form-heading m-4">
@@ -32,6 +35,7 @@ const searchType = ref("title");
 
 const handleSearchTypeChange = (value) => {
   searchType.value = value;
+  console.log(searchType.value);
 };
 const handleInputValue = (value) => {
   searchQuery.value = value;

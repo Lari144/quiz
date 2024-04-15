@@ -12,7 +12,7 @@
       <select
         v-model="searchType"
         @change="$emit('search-type-change', searchType)"
-        class="bg-input-bg text-white placeholder-gray-300 focus:outline-none rounded-full p-2"
+        class="bg-input-bg text-white placeholder-gray-300 focus:outline-none rounded-full p-2.5"
       >
         <option value="title">Title</option>
         <option value="category">Category</option>
@@ -43,6 +43,7 @@
 import type { Category } from "~/types/category";
 import { addRecord } from "./dbServices";
 
+const searchType = ref("");
 const emit = defineEmits(["input-value", "search-type-change"]);
 const input = ref("");
 const showModal = ref(false);

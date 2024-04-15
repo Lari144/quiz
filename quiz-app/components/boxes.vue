@@ -133,6 +133,7 @@ const refreshData = async () => {
       const matchingCategories = categories.value.filter((c) =>
         c.name.toLowerCase().includes(searchQueryLowercase)
       );
+      console.log(matchingCategories);
       boxes.value = boxes.value.filter((box) =>
         matchingCategories.some((category) => category.id === box.category_id)
       );
@@ -164,14 +165,15 @@ watch([() => props.searchQuery, props.searchType], () => {
   }, 500);
 });
 
-const addCard = async ({ title, category }: Box) => {
+const addCard = async ({ name, category }: Box) => {
   const tableName = "cards";
   const category_ = categories.value.find((c) => c.name === category);
   const data = {
-    title: title,
+    title: name,
     user: user.value?.id,
     category_id: category_?.id,
   };
+  console.log(data);
   try {
     await addRecord(supabase, tableName, data);
     await refreshData();
@@ -195,6 +197,7 @@ const updateCard = async (box: Box, index: number) => {
     await updateRecord(supabase, tablename, index, newCardTitle.value);
     toggleInput(box);
     await refreshData();
+    newCardTitle.value = "";
   } catch (error) {
     if (error instanceof Error) {
       console.error("Error deleting record:", error);

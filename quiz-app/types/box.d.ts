@@ -5,4 +5,5 @@ export interface Box {
   user: string | number;
   category?: string;
   showInput?: any;
+  name?: string;
 }

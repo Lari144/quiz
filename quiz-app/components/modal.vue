@@ -45,8 +45,9 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { fetchRecordsCategorie } from "./dbServices";
+
 const emits = defineEmits(["update:showModal", "submit"]);
 
 const title = ref("");
