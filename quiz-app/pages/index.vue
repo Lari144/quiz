@@ -35,8 +35,8 @@ const searchType = ref("title");
 
 const handleSearchTypeChange = (value) => {
   searchType.value = value;
-  console.log(searchType.value);
 };
+
 const handleInputValue = (value) => {
   searchQuery.value = value;
 };

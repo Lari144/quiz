@@ -173,7 +173,6 @@ const addCard = async ({ name, category }: Box) => {
     user: user.value?.id,
     category_id: category_?.id,
   };
-  console.log(data);
   try {
     await addRecord(supabase, tableName, data);
     await refreshData();
