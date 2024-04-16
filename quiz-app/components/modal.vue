@@ -47,12 +47,13 @@
 
 <script setup lang="ts">
 import { fetchRecordsCategorie } from "./dbServices";
+import type { Category } from "~/types/category";
 
 const emits = defineEmits(["update:showModal", "submit"]);
 
 const title = ref("");
 const category = ref("");
-const categories = ref([]);
+const categories = ref<Category[]>([]);
 const supabase = useSupabaseClient();
 
 onMounted(() => {
